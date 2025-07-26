@@ -103,6 +103,28 @@
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
         }
+
+        /* Mobile specific styles for category navigation */
+        #category-buttons-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+        }
+        #category-buttons-container.is-expanded {
+            max-height: 500px;
+        }
+        #category-toggle-btn.rotated svg {
+            transform: rotate(180deg);
+        }
+
+        /* Desktop specific styles for category navigation */
+        @media (min-width: 768px) { /* md breakpoint */
+            #category-buttons-container {
+                max-height: none !important;
+                overflow: visible !important;
+                display: flex !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50 flex flex-col">
@@ -123,8 +145,21 @@
     </header>
 
     <nav id="category-nav" class="shadow-md py-4 sticky top-0 z-10">
-        <div class="container mx-auto flex flex-wrap justify-center gap-3 px-4" id="category-buttons-container">
-            
+        <div class="container mx-auto px-4">
+            <!-- Mobile view: Selected category and toggle -->
+            <div class="md:hidden flex justify-between items-center mb-2">
+                <span id="mobile-selected-category" class="text-lg font-semibold text-gray-800 dark:text-gray-200">Toate</span>
+                <button id="category-toggle-btn" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 transition-transform duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform rotate-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Desktop view / Expanded mobile view: All category buttons -->
+            <div id="category-buttons-container" class="flex flex-wrap justify-center gap-3">
+                
+            </div>
         </div>
     </nav>
 
@@ -267,7 +302,7 @@
                 category: "Mezeluri",
                 store: "Lidl",
                 image: "https://placehold.co/150x150/8B0000/FFFFFF?text=Mici",
-                description: "Mici tradiționali românești, pregătiți pentru grătar. Un preparat iconic, perfect pentru orice ocazie festivă."
+                description: "Mici tradiționali românești, pregătiți pentru grătar. Un preparat iconic, perfect pentru orice ocazie festină."
             },
             {
                 id: 13,
@@ -304,6 +339,7 @@
         ];
 
         let selectedCategory = 'Toate';
+        let isCategoryNavExpanded = false;
 
         function createProductCard(product) {
             const cardDiv = document.createElement('div');
@@ -344,11 +380,14 @@
 
         function renderCategoryButtons() {
             const categoryButtonsContainer = document.getElementById('category-buttons-container');
+            const mobileSelectedCategorySpan = document.getElementById('mobile-selected-category');
             categoryButtonsContainer.innerHTML = '';
 
             const uniqueCategories = [...new Set(productsData.map(p => p.category))];
             const sortedCategories = uniqueCategories.sort();
             const categories = ["Toate", ...sortedCategories];
+
+            mobileSelectedCategorySpan.textContent = selectedCategory;
 
             categories.forEach(category => {
                 const button = document.createElement('button');
@@ -364,6 +403,9 @@
                     selectedCategory = category;
                     renderCategoryButtons();
                     renderProducts();
+                    if (window.innerWidth < 768) {
+                        toggleCategoryNav();
+                    }
                 };
                 categoryButtonsContainer.appendChild(button);
             });
@@ -392,12 +434,26 @@
         function setTheme(isDarkMode) {
             if (isDarkMode) {
                 body.classList.add('dark-mode');
-                themeToggleBtn.textContent = '🌙';
+                themeToggleBtn.textContent = '�';
                 localStorage.setItem('theme', 'dark');
             } else {
                 body.classList.remove('dark-mode');
                 themeToggleBtn.textContent = '☀️';
                 localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleCategoryNav() {
+            const categoryButtonsContainer = document.getElementById('category-buttons-container');
+            const categoryToggleBtn = document.getElementById('category-toggle-btn');
+            isCategoryNavExpanded = !isCategoryNavExpanded;
+
+            if (isCategoryNavExpanded) {
+                categoryButtonsContainer.classList.add('is-expanded');
+                categoryToggleBtn.classList.add('rotated');
+            } else {
+                categoryButtonsContainer.classList.remove('is-expanded');
+                categoryToggleBtn.classList.remove('rotated');
             }
         }
 
@@ -417,8 +473,45 @@
                 const isDarkMode = body.classList.contains('dark-mode');
                 setTheme(!isDarkMode);
             });
+
+            document.getElementById('category-toggle-btn').addEventListener('click', toggleCategoryNav);
+        });
+
+        window.addEventListener('resize', () => {
+            const categoryButtonsContainer = document.getElementById('category-buttons-container');
+            const mobileToggleDiv = document.querySelector('.md\\:hidden'); // Select the mobile-only div
+
+            if (window.innerWidth < 768) {
+                // On mobile, ensure the toggle button is visible and categories are collapsed if not expanded
+                mobileToggleDiv.classList.remove('hidden');
+                mobileToggleDiv.classList.add('flex');
+                if (!isCategoryNavExpanded) {
+                    categoryButtonsContainer.classList.remove('is-expanded');
+                    document.getElementById('category-toggle-btn').classList.remove('rotated');
+                }
+            } else {
+                // On desktop, hide the toggle button and ensure categories are always visible
+                mobileToggleDiv.classList.add('hidden');
+                mobileToggleDiv.classList.remove('flex');
+                categoryButtonsContainer.classList.remove('is-expanded');
+                document.getElementById('category-toggle-btn').classList.remove('rotated');
+                isCategoryNavExpanded = false; // Reset state for desktop
+            }
+        });
+
+        // Initial check on load for mobile/desktop display
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileToggleDiv = document.querySelector('.md\\:hidden');
+            if (window.innerWidth < 768) {
+                mobileToggleDiv.classList.remove('hidden');
+                mobileToggleDiv.classList.add('flex');
+            } else {
+                mobileToggleDiv.classList.add('hidden');
+                mobileToggleDiv.classList.remove('flex');
+            }
         });
     </script>
 
 </body>
 </html>
+�
