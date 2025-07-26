@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUY FROM ROMANIA</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .animate-scale-in {
+            animation: scaleIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .animate-slide-in-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .romanian-flag-gradient {
+            background: linear-gradient(to right, #002B7F, #FCD116, #CE1126);
+        }
+
+        body.dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        body.dark-mode #category-nav {
+            background-color: rgba(45, 55, 72, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        body.dark-mode #category-buttons-container button {
+            background-color: #4a5568;
+            color: #cbd5e0;
+        }
+        body.dark-mode #category-buttons-container button.bg-blue-600 {
+            background-color: #2563eb;
+            color: #ffffff;
+        }
+        body.dark-mode #products-section-title {
+            color: #e2e8f0;
+        }
+        body.dark-mode .product-card-container {
+            background-color: #2d3748;
+        }
+        body.dark-mode .product-card-container h3 {
+            color: #e2e8f0;
+        }
+        body.dark-mode #product-modal .bg-white {
+            background-color: #2d3748;
+        }
+        body.dark-mode #product-modal h2,
+        body.dark-mode #product-modal p.text-gray-700 {
+            color: #e2e8f0;
+        }
+        body.dark-mode #product-modal p.text-blue-600 {
+            color: #93c5fd;
+        }
+        body.dark-mode #close-modal-btn {
+            color: #cbd5e0;
+        }
+        body.dark-mode #theme-toggle {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        #category-nav {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50 flex flex-col">
+
+    <header class="romanian-flag-gradient p-6 shadow-lg rounded-b-2xl relative">
+        <div class="container mx-auto text-center">
+            <h1 class="text-white text-5xl font-extrabold tracking-tight mb-4">
+                <span class="block animate-fade-in">BUY FROM ROMANIA</span>
+            </h1>
+            <p class="text-blue-100 text-2xl font-semibold">
+                Descoperă produse autentice românești!
+            </p>
+        </div>
+        <button id="theme-toggle" class="fixed top-4 right-4 bg-gray-200 text-gray-800 p-3 rounded-full shadow-lg
+                                         transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none z-50">
+            ☀️
+        </button>
+    </header>
+
+    <nav id="category-nav" class="shadow-md py-4 sticky top-0 z-10">
+        <div class="container mx-auto flex flex-wrap justify-center gap-3 px-4" id="category-buttons-container">
+            
+        </div>
+    </nav>
+
+    <main class="container mx-auto my-8 p-4 flex-grow">
+        <h2 id="products-section-title" class="text-4xl font-bold text-gray-800 mb-8 text-center animate-slide-in-right">
+            Toate Produsele
+        </h2>
+
+        <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white p-6 mt-8 rounded-t-2xl shadow-inner">
+        <div class="container mx-auto text-center">
+            <p>&copy; <span id="current-year"></span> BUY FROM ROMANIA. Toate drepturile rezervate.</p>
+            <p class="text-sm text-gray-400 mt-2">
+                Creat cu pasiune pentru produsele românești.
+            </p>
+        </div>
+    </footer>
+
+    <div id="product-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden animate-fade-in">
+        <div class="bg-white rounded-xl shadow-2xl p-6 relative max-w-lg w-full transform animate-scale-in">
+            <button id="close-modal-btn"
+                    class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold
+                           transition-transform duration-200 hover:rotate-90 focus:outline-none"
+                    aria-label="Închide">
+                &times;
+            </button>
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                <img id="modal-product-image"
+                     src=""
+                     alt=""
+                     class="w-40 h-40 object-cover rounded-lg shadow-md flex-shrink-0"
+                     onerror="this.onerror=null;this.src='https://placehold.co/160x160/CCCCCC/666666?text=Produs';"
+                />
+                <div class="text-center md:text-left">
+                    <h2 id="modal-product-name" class="text-3xl font-bold text-gray-800 mb-2"></h2>
+                    <p id="modal-product-store" class="text-blue-600 text-lg font-medium mb-3"></p>
+                    <p id="modal-product-description" class="text-gray-700 leading-relaxed"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const productsData = [
+            {
+                id: 1,
+                name: "Apă Minerală Borsec",
+                category: "Apă",
+                store: "Mega Image",
+                image: "https://placehold.co/150x150/87CEEB/FFFFFF?text=Borsec",
+                description: "Apă minerală naturală carbogazificată, bogată în minerale esențiale. Perfectă pentru hidratare zilnică sau pentru a însoți mesele."
+            },
+            {
+                id: 2,
+                name: "Apă Plată Aqua Carpatica",
+                category: "Apă",
+                store: "Carrefour",
+                image: "https://placehold.co/150x150/ADD8E6/FFFFFF?text=Aqua+Carpatica",
+                description: "Apă minerală naturală plată, cu un conținut scăzut de sodiu, ideală pentru bebeluși și persoanele cu dietă specială. Pură și echilibrată."
+            },
+            {
+                id: 3,
+                name: "Pâine Albă Feliată",
+                category: "Paine",
+                store: "Lidl",
+                image: "https://placehold.co/150x150/F0E68C/000000?text=Paine+Alba",
+                description: "Pâine albă moale și pufoasă, feliată pentru comoditate. Ideală pentru sandvișuri sau ca bază pentru bruschete."
+            },
+            {
+                id: 4,
+                name: "Pâine Integrală",
+                category: "Paine",
+                store: "Kaufland",
+                image: "https://placehold.co/150x150/DAA520/FFFFFF?text=Paine+Integrala",
+                description: "Pâine integrală bogată în fibre, preparată din cereale integrale. Contribuie la o digestie sănătoasă și oferă energie pe termen lung."
+            },
+            {
+                id: 5,
+                name: "Bere Ursus Premium",
+                category: "Bauturi",
+                store: "Auchan",
+                image: "https://placehold.co/150x150/FFA07A/FFFFFF?text=Ursus",
+                description: "Bere lager românească, cu gust echilibrat și răcoritor. Perfectă pentru a te relaxa după o zi lungă sau pentru a o savura alături de prieteni."
+            },
+            {
+                id: 6,
+                name: "Vin Roșu Fetească Neagră",
+                category: "Bauturi",
+                store: "Profy",
+                image: "https://placehold.co/150x150/8B0000/FFFFFF?text=Feteasca+Neagra",
+                description: "Vin roșu sec, cu arome intense de fructe de pădure și note subtile de condimente. Ideal pentru a însoți preparate din carne roșie sau brânzeturi maturate."
+            },
+            {
+                id: 7,
+                name: "Lapte 3.5% grăsime",
+                category: "Lactate",
+                store: "Mega Image",
+                image: "https://placehold.co/150x150/E0FFFF/000000?text=Lapte",
+                description: "Lapte proaspăt, integral, cu 3.5% grăsime. O sursă excelentă de calciu și proteine, ideal pentru micul dejun sau în cafea."
+            },
+            {
+                id: 8,
+                name: "Iaurt Natural",
+                category: "Lactate",
+                store: "Lidl",
+                image: "https://placehold.co/150x150/F5DEB3/000000?text=Iaurt",
+                description: "Iaurt cremos, fără aditivi, preparat din lapte proaspăt. Perfect pentru o gustare sănătoasă sau ca bază pentru sosuri și dressing-uri."
+            },
+            {
+                id: 9,
+                name: "Salam de Sibiu",
+                category: "Mezeluri",
+                store: "Carrefour",
+                image: "https://placehold.co/150x150/8B4513/FFFFFF?text=Salam+Sibiu",
+                description: "Salam tradițional românesc, afumat și maturat, cu o aromă distinctă și o textură fină. O delicatesă apreciată în toată țara."
+            },
+            {
+                id: 10,
+                name: "Cârnați de Pleșcoi",
+                category: "Mezeluri",
+                store: "Kaufland",
+                image: "https://placehold.co/150x150/A0522D/FFFFFF?text=Carnati+Plescoi",
+                description: "Cârnați picanți, specifici zonei Buzăului, preparați după o rețetă autentică. Ideali pentru grătar sau fierți, alături de o mămăliguță."
+            },
+            {
+                id: 11,
+                name: "Telemea de Ibănești",
+                category: "Lactate",
+                store: "Mega Image",
+                image: "https://placehold.co/150x150/D2B48C/000000?text=Telemea+Ibanesti",
+                description: "Telemea maturată, cu gust intens și sărat, specifică zonei Ibănești. Excelentă în salate sau ca aperitiv."
+            },
+            {
+                id: 12,
+                name: "Mici de Grătar",
+                category: "Mezeluri",
+                store: "Lidl",
+                image: "https://placehold.co/150x150/8B0000/FFFFFF?text=Mici",
+                description: "Mici tradiționali românești, pregătiți pentru grătar. Un preparat iconic, perfect pentru orice ocazie festivă."
+            },
+            {
+                id: 13,
+                name: "Făină Albă de Grâu",
+                category: "Făină și Zahăr",
+                store: "Kaufland",
+                image: "https://placehold.co/150x150/F5F5DC/000000?text=Faina+Alba",
+                description: "Făină albă de grâu, tip 000, ideală pentru patiserie și cofetărie. Asigură o textură fină și pufoasă preparatelor."
+            },
+            {
+                id: 14,
+                name: "Zahăr Cristal",
+                category: "Făină și Zahăr",
+                store: "Auchan",
+                image: "https://placehold.co/150x150/FFFFFF/000000?text=Zahar+Cristal",
+                description: "Zahăr alb cristal, perfect pentru îndulcirea băuturilor și prepararea deserturilor."
+            },
+            {
+                id: 15,
+                name: "Ulei de Floarea Soarelui",
+                category: "Ulei și Oțet",
+                store: "Carrefour",
+                image: "https://placehold.co/150x150/FFD700/000000?text=Ulei+Floarea+Soarelui",
+                description: "Ulei rafinat de floarea soarelui, ideal pentru gătit și prăjit. Un ingredient esențial în orice bucătărie."
+            },
+            {
+                id: 16,
+                name: "Oțet de Vin",
+                category: "Ulei și Oțet",
+                store: "Profy",
+                image: "https://placehold.co/150x150/800000/FFFFFF?text=Otet+Vin",
+                description: "Oțet de vin roșu, cu o aromă bogată și aciditate echilibrată. Perfect pentru salate și marinade."
+            },
+        ];
+
+        let selectedCategory = 'Toate';
+
+        function createProductCard(product) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = `product-card-container relative bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer
+                                 transform transition-all duration-300 hover:scale-105 hover:shadow-xl
+                                 flex flex-col items-center p-4 group`;
+            cardDiv.onclick = () => showProductModal(product);
+
+            cardDiv.innerHTML = `
+                <img src="${product.image}"
+                     alt="${product.name}"
+                     class="w-32 h-32 object-cover rounded-lg mb-4 transform transition-transform duration-300 group-hover:rotate-2"
+                     onerror="this.onerror=null;this.src='https://placehold.co/150x150/CCCCCC/666666?text=Produs';"
+                />
+                <h3 class="text-lg font-semibold text-gray-800 text-center mb-1">${product.name}</h3>
+                <div class="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                    ${product.store}
+                </div>
+            `;
+            return cardDiv;
+        }
+
+        function renderProducts() {
+            const productsContainer = document.getElementById('products-container');
+            productsContainer.innerHTML = '';
+            const productsSectionTitle = document.getElementById('products-section-title');
+
+            const filteredProducts = selectedCategory === 'Toate'
+                ? productsData
+                : productsData.filter(product => product.category === selectedCategory);
+
+            productsSectionTitle.textContent = selectedCategory === 'Toate' ? 'Toate Produsele' : `Produse din categoria: ${selectedCategory}`;
+
+            filteredProducts.forEach(product => {
+                productsContainer.appendChild(createProductCard(product));
+            });
+        }
+
+        function renderCategoryButtons() {
+            const categoryButtonsContainer = document.getElementById('category-buttons-container');
+            categoryButtonsContainer.innerHTML = '';
+
+            const uniqueCategories = [...new Set(productsData.map(p => p.category))];
+            const sortedCategories = uniqueCategories.sort();
+            const categories = ["Toate", ...sortedCategories];
+
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.textContent = category;
+                button.className = `px-5 py-2 rounded-full font-medium text-lg
+                                     transition-all duration-300 ease-in-out transform hover:scale-105`;
+                if (selectedCategory === category) {
+                    button.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+                } else {
+                    button.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                }
+                button.onclick = () => {
+                    selectedCategory = category;
+                    renderCategoryButtons();
+                    renderProducts();
+                };
+                categoryButtonsContainer.appendChild(button);
+            });
+        }
+
+        function showProductModal(product) {
+            const modal = document.getElementById('product-modal');
+            document.getElementById('modal-product-image').src = product.image;
+            document.getElementById('modal-product-image').alt = product.name;
+            document.getElementById('modal-product-name').textContent = product.name;
+            document.getElementById('modal-product-store').textContent = `Magazin: ${product.store}`;
+            document.getElementById('modal-product-description').textContent = product.description;
+            modal.classList.remove('hidden');
+        }
+
+        function hideProductModal() {
+            const modal = document.getElementById('product-modal');
+            modal.classList.add('hidden');
+        }
+
+        document.getElementById('close-modal-btn').addEventListener('click', hideProductModal);
+
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function setTheme(isDarkMode) {
+            if (isDarkMode) {
+                body.classList.add('dark-mode');
+                themeToggleBtn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                themeToggleBtn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            renderCategoryButtons();
+            renderProducts();
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                setTheme(true);
+            } else {
+                setTheme(false);
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                const isDarkMode = body.classList.contains('dark-mode');
+                setTheme(!isDarkMode);
+            });
+        });
+    </script>
+
+</body>
+</html>
