@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BUY FROM ROMANIA</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
@@ -104,7 +102,6 @@
             -webkit-backdrop-filter: blur(8px);
         }
 
-        /* Mobile specific styles for category navigation */
         #category-buttons-container {
             max-height: 0;
             overflow: hidden;
@@ -117,8 +114,7 @@
             transform: rotate(180deg);
         }
 
-        /* Desktop specific styles for category navigation */
-        @media (min-width: 768px) { /* md breakpoint */
+        @media (min-width: 768px) {
             #category-buttons-container {
                 max-height: none !important;
                 overflow: visible !important;
@@ -138,7 +134,8 @@
                 Descoperă produse autentice românești!
             </p>
         </div>
-        <button id="theme-toggle" class="fixed top-4 right-4 bg-gray-200 text-gray-800 p-3 rounded-full shadow-lg
+        <!-- Dark mode toggle button - Moved to bottom right corner -->
+        <button id="theme-toggle" class="fixed bottom-4 right-4 bg-gray-200 text-gray-800 p-3 rounded-full shadow-lg
                                          transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none z-50">
             ☀️
         </button>
@@ -148,8 +145,9 @@
         <div class="container mx-auto px-4">
             <!-- Mobile view: Selected category and toggle -->
             <div class="md:hidden flex justify-between items-center mb-2">
-                <span id="mobile-selected-category" class="text-lg font-semibold text-gray-800 dark:text-gray-200">Toate</span>
-                <button id="category-toggle-btn" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 transition-transform duration-300">
+                <!-- Changed text size, color, and added text-center -->
+                <span id="mobile-selected-category" class="w-full text-center text-2xl font-bold text-blue-600">Toate</span>
+                <button id="category-toggle-btn" class="absolute right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 transition-transform duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform rotate-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
@@ -175,7 +173,7 @@
 
     <footer class="bg-gray-800 text-white p-6 mt-8 rounded-t-2xl shadow-inner">
         <div class="container mx-auto text-center">
-            <p>&copy; <span id="current-year"></span> BUY FROM ROMANIA. Toate drepturile rezervate.</p>
+            <p>&copy; <span id="current-year"></span> KEYRIF. Toate drepturile rezervate.</p>
             <p class="text-sm text-gray-400 mt-2">
                 Creat cu pasiune pentru produsele românești.
             </p>
@@ -434,7 +432,7 @@
         function setTheme(isDarkMode) {
             if (isDarkMode) {
                 body.classList.add('dark-mode');
-                themeToggleBtn.textContent = '�';
+                themeToggleBtn.textContent = '🌙';
                 localStorage.setItem('theme', 'dark');
             } else {
                 body.classList.remove('dark-mode');
@@ -479,10 +477,9 @@
 
         window.addEventListener('resize', () => {
             const categoryButtonsContainer = document.getElementById('category-buttons-container');
-            const mobileToggleDiv = document.querySelector('.md\\:hidden'); // Select the mobile-only div
+            const mobileToggleDiv = document.querySelector('.md\\:hidden');
 
             if (window.innerWidth < 768) {
-                // On mobile, ensure the toggle button is visible and categories are collapsed if not expanded
                 mobileToggleDiv.classList.remove('hidden');
                 mobileToggleDiv.classList.add('flex');
                 if (!isCategoryNavExpanded) {
@@ -490,16 +487,14 @@
                     document.getElementById('category-toggle-btn').classList.remove('rotated');
                 }
             } else {
-                // On desktop, hide the toggle button and ensure categories are always visible
                 mobileToggleDiv.classList.add('hidden');
                 mobileToggleDiv.classList.remove('flex');
                 categoryButtonsContainer.classList.remove('is-expanded');
                 document.getElementById('category-toggle-btn').classList.remove('rotated');
-                isCategoryNavExpanded = false; // Reset state for desktop
+                isCategoryNavExpanded = false;
             }
         });
 
-        // Initial check on load for mobile/desktop display
         document.addEventListener('DOMContentLoaded', () => {
             const mobileToggleDiv = document.querySelector('.md\\:hidden');
             if (window.innerWidth < 768) {
@@ -514,4 +509,3 @@
 
 </body>
 </html>
-�
