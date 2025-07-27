@@ -38,25 +38,6 @@ body {
     }
 }
 
-::-webkit-scrollbar {
-    width: 12px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #002B7F 0%, #FCD116 50%, #CE1126 100%);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, #002B7F 0%, #FCD116 50%, #CE1126 100%);
-}
-
-
 body.dark-mode {
     background-color: #1a202c;
     color: #e2e8f0;
