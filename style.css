@@ -45,6 +45,7 @@ body.no-animations * {
 }
 
 
+
 body.dark-mode {
     background-color: #1a202c;
     color: #e2e8f0;
@@ -170,7 +171,7 @@ body.dark-mode #clear-desktop-search-btn {
 
 @keyframes buttonClickScale {
     0% { transform: scale(1); }
-    50% { transform: scale(1.05); } 
+    50% { transform: scale(1.1); } 
     100% { transform: scale(1); }
 }
 
@@ -180,7 +181,7 @@ body.dark-mode #clear-desktop-search-btn {
 }
 
 .button-active-animation {
-    animation: buttonClickScale 0.2s ease-out; 
+    animation: buttonClickScale 0.2s ease-out;
 }
 
 .icon-active-rotation {
@@ -340,4 +341,9 @@ body.dark-mode #desktop-search-input::placeholder {
 
 footer {
     background-color: rgba(31, 41, 55, 0.85);
+}
+
+body.black-and-white-mode {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%); 
 }
