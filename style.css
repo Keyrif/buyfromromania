@@ -88,12 +88,16 @@ body.dark-mode #close-recipe-modal-btn {
     color: #cbd5e0;
 }
 body.dark-mode #theme-toggle {
-    background-color: #4a5568;
+    background-color: rgba(45, 55, 72, 0.7); 
     color: #e2e8f0;
+    backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px); 
 }
 body.dark-mode #view-wishlist-btn {
-    background-color: #4a5568;
+    background-color: rgba(45, 55, 72, 0.7); 
     color: #e2e8f0;
+    backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px); 
 }
 body.dark-mode .add-to-wishlist-btn {
     background-color: #a0aec0;
@@ -113,7 +117,8 @@ body.dark-mode #wishlist-count-badge {
     color: #ffffff;
 }
 body.dark-mode #generate-recipe-btn,
-body.dark-mode #generate-wishlist-recipe-btn {
+body.dark-mode #generate-wishlist-recipe-btn,
+body.dark-mode #clear-wishlist-btn {
     background-color: #4a5568;
     color: #e2e8f0;
 }
@@ -147,7 +152,7 @@ body.dark-mode #generate-wishlist-recipe-btn {
 
 @keyframes buttonClickScale {
     0% { transform: scale(1); }
-    50% { transform: scale(1.15); }
+    50% { transform: scale(1.01); }
     100% { transform: scale(1); }
 }
 
@@ -157,11 +162,23 @@ body.dark-mode #generate-wishlist-recipe-btn {
 }
 
 .button-active-animation {
-    animation: buttonClickScale 0.4s ease-out;
+    animation: buttonClickScale 0.2s ease-out;
 }
 
 .icon-active-rotation {
     animation: iconRotate 0.4s ease-out;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-8px); }
+    100% { transform: translateX(0); }
+}
+
+.shake-animation {
+    animation: shake 0.3s ease-in-out;
 }
 
 #wishlist-count-badge {
@@ -191,7 +208,17 @@ body.dark-mode #generate-wishlist-recipe-btn {
     bottom: 1rem;
     right: 90px;
     z-index: 50;
+    background-color: rgba(59, 130, 246, 0.7); 
+    backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px); 
 }
+
+#theme-toggle {
+    background-color: rgba(59, 130, 246, 0.7); 
+    backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px); 
+}
+
 
 @keyframes fadeOutShrink {
     0% { opacity: 1; transform: scale(1); }
