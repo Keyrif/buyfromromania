@@ -209,6 +209,14 @@ function addToWishlist(productId) {
 function removeFromWishlist(productId) {
     const itemToRemoveElement = document.querySelector(`#wishlist-items-container .wishlist-item-card button[data-product-id="${productId}"]`);
     
+    // Add click animation to the remove button itself
+    if (itemToRemoveElement) {
+        itemToRemoveElement.classList.add('button-active-animation');
+        setTimeout(() => {
+            itemToRemoveElement.classList.remove('button-active-animation');
+        }, 200); // Match animation duration
+    }
+
     if (itemToRemoveElement && itemToRemoveElement.closest('.wishlist-item-card')) {
         const parentCard = itemToRemoveElement.closest('.wishlist-item-card');
         parentCard.classList.add('wishlist-item-removing');
@@ -359,6 +367,11 @@ function updateModalWishlistButton(productId) {
         modalWishlistBtn.classList.add('bg-red-500', 'hover:bg-red-600');
         modalWishlistBtn.disabled = false;
         modalWishlistBtn.onclick = () => {
+            // Add subtle click animation for "Elimină din Wishlist"
+            modalWishlistBtn.classList.add('button-active-animation');
+            setTimeout(() => {
+                modalWishlistBtn.classList.remove('button-active-animation');
+            }, 200); // Faster animation duration
             removeFromWishlist(productId);
             updateModalWishlistButton(productId);
         };
@@ -369,6 +382,11 @@ function updateModalWishlistButton(productId) {
         modalWishlistBtn.disabled = false;
         modalWishlistBtn.onclick = () => {
             addToWishlist(productId);
+            // Add subtle click animation for "Adaugă la Wishlist"
+            modalWishlistBtn.classList.add('button-active-animation');
+            setTimeout(() => {
+                modalWishlistBtn.classList.remove('button-active-animation');
+            }, 200); // Faster animation duration
             updateModalWishlistButton(productId);
         };
     }
@@ -398,7 +416,13 @@ function showProductModal(product) {
     const generateRecipeBtn = document.getElementById('generate-recipe-btn');
     if (FOOD_CATEGORIES.includes(product.category)) {
         generateRecipeBtn.classList.remove('hidden');
-        generateRecipeBtn.onclick = () => generateRecipe(product.name);
+        generateRecipeBtn.onclick = () => {
+            generateRecipe(product.name);
+            generateRecipeBtn.classList.add('button-active-animation');
+            setTimeout(() => {
+                generateRecipeBtn.classList.remove('button-active-animation');
+            }, 200); // Faster animation duration
+        };
     } else {
         generateRecipeBtn.classList.add('hidden');
         generateRecipeBtn.onclick = null;
@@ -464,6 +488,13 @@ function renderWishlistItems() {
             });
         }
     });
+}
+
+function clearWishlist() {
+    wishlist = [];
+    saveWishlist();
+    renderWishlistItems();
+    renderProducts();
 }
 
 async function generateRecipe(productName) {
@@ -730,7 +761,34 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('wishlist-modal').classList.add('hidden');
     });
 
-    document.getElementById('generate-wishlist-recipe-btn').addEventListener('click', generateWishlistRecipe);
+    const generateWishlistRecipeBtn = document.getElementById('generate-wishlist-recipe-btn');
+    const clearWishlistBtn = document.getElementById('clear-wishlist-btn');
+
+    generateWishlistRecipeBtn.addEventListener('click', () => {
+        generateWishlistRecipe();
+        // Add subtle click animation
+        generateWishlistRecipeBtn.classList.add('button-active-animation');
+        setTimeout(() => {
+            generateWishlistRecipeBtn.classList.remove('button-active-animation');
+        }, 200); // Faster animation duration
+    });
+
+    clearWishlistBtn.addEventListener('click', () => {
+        if (wishlist.length === 0) {
+            // Add shake animation if wishlist is empty
+            clearWishlistBtn.classList.add('shake-animation');
+            setTimeout(() => {
+                clearWishlistBtn.classList.remove('shake-animation');
+            }, 300); // Match animation duration
+        } else {
+            // Add subtle click animation if wishlist has items
+            clearWishlist();
+            clearWishlistBtn.classList.add('button-active-animation');
+            setTimeout(() => {
+                clearWishlistBtn.classList.remove('button-active-animation');
+            }, 200); // Faster animation duration
+        }
+    });
 
     const customContextMenu = document.getElementById('custom-context-menu');
     const contextProductName = document.getElementById('context-product-name');

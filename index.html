@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/2560px-Flag_of_Romania.svg.png" type="image/png">
 </head>
 <body class="min-h-screen bg-gray-50 flex flex-col">
 
@@ -106,10 +107,10 @@
                     <p id="modal-product-store" class="text-blue-600 text-lg font-medium mb-3"></p>
                     <p id="modal-product-location" class="text-gray-700 text-lg mb-3"></p>
                     <p id="modal-product-description" class="text-gray-700 leading-relaxed"></p>
-                    <button id="modal-add-to-wishlist-btn" class="mt-4 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200">
+                    <button id="modal-add-to-wishlist-btn" class="mt-4 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 transform hover:scale-105">
                         Adaugă la Wishlist
                     </button>
-                    <button id="generate-recipe-btn" class="mt-4 ml-2 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 bg-green-500 hover:bg-green-600 hidden">
+                    <button id="generate-recipe-btn" class="mt-4 ml-2 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 bg-green-500 hover:bg-green-600 hover:scale-105 transform hidden">
                         Sugerează Rețetă
                     </button>
                 </div>
@@ -130,8 +131,11 @@
             <div id="wishlist-items-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
             </div>
             <p id="empty-wishlist-message" class="text-center text-gray-600 mt-4 hidden">Wishlist-ul este gol.</p>
-            <button id="generate-wishlist-recipe-btn" class="mt-4 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 bg-purple-500 hover:bg-purple-600 w-full">
+            <button id="generate-wishlist-recipe-btn" class="mt-4 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 bg-purple-500 hover:bg-purple-600 hover:scale-105 transform w-full">
                 Sugerează Rețetă cu Wishlist
+            </button>
+            <button id="clear-wishlist-btn" class="mt-2 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 bg-red-500 hover:bg-red-600 hover:scale-105 transform w-full">
+                Șterge tot Wishlist-ul
             </button>
         </div>
     </div>
