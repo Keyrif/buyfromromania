@@ -1041,11 +1041,11 @@
         function setTheme(isDarkMode) {
             if (isDarkMode) {
                 body.classList.add('dark-mode');
-                themeIcon.textContent = '�';
+                themeIcon.textContent = '🌙'; // Ensure this is the correct moon emoji
                 localStorage.setItem('theme', 'dark');
             } else {
                 body.classList.remove('dark-mode');
-                themeIcon.textContent = '☀️';
+                themeIcon.textContent = '☀️'; // Ensure this is the correct sun emoji
                 localStorage.setItem('theme', 'light');
             }
         }
@@ -1329,4 +1329,3 @@
 
 </body>
 </html>
-�
