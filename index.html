@@ -48,8 +48,6 @@
             scrollbar-width: none;
         }
 
-        /* Removed romanian-flag-gradient class */
-
         body.dark-mode {
             background-color: #1a202c;
             color: #e2e8f0;
@@ -223,15 +221,49 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        #custom-context-menu {
+            display: none;
+            position: fixed;
+            min-width: 180px;
+            background-color: white; /* Default light mode */
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.1s ease-out;
+            pointer-events: none;
+        }
+        body.dark-mode #custom-context-menu {
+            background-color: #2d3748; /* Dark mode background */
+        }
+        #custom-context-menu.show {
+            display: block;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #custom-context-menu button {
+            white-space: nowrap;
+            color: #374151; /* Default light mode text */
+        }
+        body.dark-mode #custom-context-menu button {
+            color: #e2e8f0; /* Dark mode text */
+        }
+        #custom-context-menu button:hover {
+            background-color: #e5e7eb; /* Default light mode hover */
+        }
+        body.dark-mode #custom-context-menu button:hover {
+            background-color: #4a5568; /* Dark mode hover */
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50 flex flex-col">
 
     <header class="p-6 shadow-lg rounded-b-2xl relative overflow-hidden">
         <div class="absolute inset-0 flex">
-            <div class="w-1/3 bg-[#002B7F]"></div> <!-- Blue -->
-            <div class="w-1/3 bg-[#FCD116]"></div> <!-- Yellow -->
-            <div class="w-1/3 bg-[#CE1126]"></div> <!-- Red -->
+            <div class="w-1/3 bg-[#002B7F]"></div>
+            <div class="w-1/3 bg-[#FCD116]"></div>
+            <div class="w-1/3 bg-[#CE1126]"></div>
         </div>
         <div class="container mx-auto text-center relative z-10">
             <h1 class="text-white text-5xl font-extrabold tracking-tight mb-4">
@@ -338,9 +370,6 @@
             <button id="generate-wishlist-recipe-btn" class="mt-4 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 bg-purple-500 hover:bg-purple-600 w-full">
                 ✨ Sugerează Rețetă cu Wishlist
             </button>
-            <p class="text-center text-sm text-gray-500 italic mt-4 dark:text-gray-400">
-                * Această listă de dorințe este salvată doar în browserul tău și nu este disponibilă pe termen lung sau pe alte dispozitive.
-            </p>
         </div>
     </div>
 
@@ -361,6 +390,16 @@
     </div>
 
     <canvas id="sparkCanvas" class="fixed inset-0 pointer-events-none z-40"></canvas>
+
+    <!-- Custom Context Menu -->
+    <div id="custom-context-menu" class="absolute bg-white rounded-lg shadow-lg py-2 z-50 hidden">
+        <button id="context-add-to-wishlist" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md">
+            Adaugă la Wishlist
+        </button>
+        <button id="context-view-details" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md">
+            Vezi Detalii
+        </button>
+    </div>
 
     <script>
         const productsData = [
@@ -535,6 +574,8 @@
         const WISHLIST_STORAGE_KEY = 'buy_from_romania_wishlist';
         const FOOD_CATEGORIES = ["Paine", "Lactate", "Carne", "Dulciuri", "Făină și Zahăr", "Ulei și Oțet"];
 
+        let currentRightClickedProductId = null;
+
         function loadWishlist() {
             const storedWishlist = localStorage.getItem(WISHLIST_STORAGE_KEY);
             if (storedWishlist) {
@@ -604,7 +645,7 @@
             cardDiv.className = `product-card-container relative bg-white rounded-xl shadow-lg overflow-hidden
                                  transform transition-all duration-300 hover:scale-105 hover:shadow-xl
                                  flex flex-col items-center p-4 group`;
-            
+            cardDiv.setAttribute('data-product-id', product.id);
             cardDiv.onclick = () => showProductModal(product);
 
             cardDiv.innerHTML = `
@@ -1045,6 +1086,80 @@
             });
 
             document.getElementById('generate-wishlist-recipe-btn').addEventListener('click', generateWishlistRecipe);
+
+            // Custom Context Menu Logic
+            const customContextMenu = document.getElementById('custom-context-menu');
+            const contextAddToWishlistBtn = document.getElementById('context-add-to-wishlist');
+            const contextViewDetailsBtn = document.getElementById('context-view-details');
+            const productsContainer = document.getElementById('products-container');
+
+            productsContainer.addEventListener('contextmenu', (event) => {
+                const productCard = event.target.closest('.product-card-container');
+                if (productCard) {
+                    event.preventDefault();
+
+                    currentRightClickedProductId = parseInt(productCard.getAttribute('data-product-id'));
+
+                    customContextMenu.style.left = `${event.clientX}px`;
+                    customContextMenu.style.top = `${event.clientY}px`;
+
+                    const menuWidth = customContextMenu.offsetWidth;
+                    const menuHeight = customContextMenu.offsetHeight;
+                    if (event.clientX + menuWidth > window.innerWidth) {
+                        customContextMenu.style.left = `${window.innerWidth - menuWidth - 10}px`;
+                    }
+                    if (event.clientY + menuHeight > window.innerHeight) {
+                        customContextMenu.style.top = `${window.innerHeight - menuHeight - 10}px`;
+                    }
+
+                    if (isProductInWishlist(currentRightClickedProductId)) {
+                        contextAddToWishlistBtn.textContent = 'Elimină din Wishlist';
+                        contextAddToWishlistBtn.classList.add('bg-red-500', 'text-white', 'hover:bg-red-600');
+                        contextAddToWishlistBtn.classList.remove('text-gray-800', 'hover:bg-gray-100'); // Remove light mode specific classes
+                        // Ensure dark mode classes are applied if dark mode is active
+                        if (body.classList.contains('dark-mode')) {
+                            contextAddToWishlistBtn.classList.remove('dark:text-gray-200', 'dark:hover:bg-gray-600');
+                        }
+                    } else {
+                        contextAddToWishlistBtn.textContent = 'Adaugă la Wishlist';
+                        contextAddToWishlistBtn.classList.remove('bg-red-500', 'text-white', 'hover:bg-red-600');
+                        contextAddToWishlistBtn.classList.add('text-gray-800', 'hover:bg-gray-100'); // Add light mode specific classes
+                        // Ensure dark mode classes are applied if dark mode is active
+                        if (body.classList.contains('dark-mode')) {
+                            contextAddToWishlistBtn.classList.add('dark:text-gray-200', 'dark:hover:bg-gray-600');
+                        }
+                    }
+                    
+                    customContextMenu.classList.add('show');
+                }
+            });
+
+            document.addEventListener('click', (event) => {
+                if (customContextMenu.classList.contains('show') && !customContextMenu.contains(event.target)) {
+                    customContextMenu.classList.remove('show');
+                }
+            });
+
+            contextAddToWishlistBtn.addEventListener('click', () => {
+                if (currentRightClickedProductId !== null) {
+                    if (isProductInWishlist(currentRightClickedProductId)) {
+                        removeFromWishlist(currentRightClickedProductId);
+                    } else {
+                        addToWishlist(currentRightClickedProductId);
+                    }
+                    customContextMenu.classList.remove('show');
+                }
+            });
+
+            contextViewDetailsBtn.addEventListener('click', () => {
+                if (currentRightClickedProductId !== null) {
+                    const product = productsData.find(p => p.id === currentRightClickedProductId);
+                    if (product) {
+                        showProductModal(product);
+                    }
+                    customContextMenu.classList.remove('show');
+                }
+            });
         });
 
         window.addEventListener('resize', () => {
