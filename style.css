@@ -88,16 +88,16 @@ body.dark-mode #close-recipe-modal-btn {
     color: #cbd5e0;
 }
 body.dark-mode #theme-toggle {
-    background-color: rgba(45, 55, 72, 0.7); 
+    background-color: rgba(45, 55, 72, 0.9);
     color: #e2e8f0;
-    backdrop-filter: blur(8px); 
-    -webkit-backdrop-filter: blur(8px); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 body.dark-mode #view-wishlist-btn {
-    background-color: rgba(45, 55, 72, 0.7); 
+    background-color: rgba(45, 55, 72, 0.9);
     color: #e2e8f0;
-    backdrop-filter: blur(8px); 
-    -webkit-backdrop-filter: blur(8px); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 body.dark-mode .add-to-wishlist-btn {
     background-color: #a0aec0;
@@ -116,11 +116,23 @@ body.dark-mode #wishlist-count-badge {
     background-color: #ef4444;
     color: #ffffff;
 }
-body.dark-mode #generate-recipe-btn,
-body.dark-mode #generate-wishlist-recipe-btn,
-body.dark-mode #clear-wishlist-btn {
-    background-color: #4a5568;
+body.dark-mode #generate-recipe-btn {
+    background-color: #047857;
     color: #e2e8f0;
+}
+body.dark-mode #generate-wishlist-recipe-btn {
+    background-color: #047857;
+    color: #e2e8f0;
+}
+body.dark-mode #clear-wishlist-btn {
+    background-color: #b91c1c;
+    color: #e2e8f0;
+}
+
+body.dark-mode #clear-mobile-search-btn,
+body.dark-mode #clear-desktop-search-btn {
+    color: #a0aec0;
+    background-color: transparent;
 }
 
 
@@ -208,15 +220,15 @@ body.dark-mode #clear-wishlist-btn {
     bottom: 1rem;
     right: 90px;
     z-index: 50;
-    background-color: rgba(59, 130, 246, 0.7); 
-    backdrop-filter: blur(8px); 
-    -webkit-backdrop-filter: blur(8px); 
+    background-color: rgba(59, 130, 246, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 #theme-toggle {
-    background-color: rgba(59, 130, 246, 0.7); 
-    backdrop-filter: blur(8px); 
-    -webkit-backdrop-filter: blur(8px); 
+    background-color: rgba(59, 130, 246, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 
@@ -299,4 +311,15 @@ body.dark-mode #desktop-search-input {
 body.dark-mode #mobile-search-input::placeholder,
 body.dark-mode #desktop-search-input::placeholder {
     color: #a0aec0;
+}
+
+/* Added specific styles for light mode for these buttons */
+#generate-recipe-btn {
+    background-color: #22c55e; /* Tailwind green-500 */
+}
+#generate-wishlist-recipe-btn {
+    background-color: #22c55e; /* Tailwind green-500 */
+}
+#clear-wishlist-btn {
+    background-color: #ef4444; /* Tailwind red-500 */
 }

@@ -209,12 +209,12 @@ function addToWishlist(productId) {
 function removeFromWishlist(productId) {
     const itemToRemoveElement = document.querySelector(`#wishlist-items-container .wishlist-item-card button[data-product-id="${productId}"]`);
     
-    // Add click animation to the remove button itself
+
     if (itemToRemoveElement) {
         itemToRemoveElement.classList.add('button-active-animation');
         setTimeout(() => {
             itemToRemoveElement.classList.remove('button-active-animation');
-        }, 200); // Match animation duration
+        }, 200); 
     }
 
     if (itemToRemoveElement && itemToRemoveElement.closest('.wishlist-item-card')) {
@@ -345,6 +345,9 @@ function renderCategoryButtons() {
             searchTerm = '';
             document.getElementById('mobile-search-input').value = '';
             document.getElementById('desktop-search-input').value = '';
+
+            document.getElementById('clear-mobile-search-btn').classList.add('hidden');
+            document.getElementById('clear-desktop-search-btn').classList.add('hidden');
             renderCategoryButtons();
             renderProducts();
             if (window.innerWidth < 768) {
@@ -367,11 +370,11 @@ function updateModalWishlistButton(productId) {
         modalWishlistBtn.classList.add('bg-red-500', 'hover:bg-red-600');
         modalWishlistBtn.disabled = false;
         modalWishlistBtn.onclick = () => {
-            // Add subtle click animation for "Elimină din Wishlist"
+
             modalWishlistBtn.classList.add('button-active-animation');
             setTimeout(() => {
                 modalWishlistBtn.classList.remove('button-active-animation');
-            }, 200); // Faster animation duration
+            }, 200); 
             removeFromWishlist(productId);
             updateModalWishlistButton(productId);
         };
@@ -382,11 +385,10 @@ function updateModalWishlistButton(productId) {
         modalWishlistBtn.disabled = false;
         modalWishlistBtn.onclick = () => {
             addToWishlist(productId);
-            // Add subtle click animation for "Adaugă la Wishlist"
             modalWishlistBtn.classList.add('button-active-animation');
             setTimeout(() => {
                 modalWishlistBtn.classList.remove('button-active-animation');
-            }, 200); // Faster animation duration
+            }, 200); 
             updateModalWishlistButton(productId);
         };
     }
@@ -421,7 +423,7 @@ function showProductModal(product) {
             generateRecipeBtn.classList.add('button-active-animation');
             setTimeout(() => {
                 generateRecipeBtn.classList.remove('button-active-animation');
-            }, 200); // Faster animation duration
+            }, 200); 
         };
     } else {
         generateRecipeBtn.classList.add('hidden');
@@ -476,7 +478,7 @@ function renderWishlistItems() {
                     <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">${product.name}</h4>
                     <p class="text-sm text-gray-600 dark:text-gray-400">Magazin: ${product.store}</p>
                 </div>
-                <button class="remove-from-wishlist-btn bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors duration-200" data-product-id="${product.id}">
+                <button class="remove-from-wishlist-btn bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors duration-200 transform hover:scale-105" data-product-id="${product.id}">
                     &times;
                 </button>
             `;
@@ -770,23 +772,23 @@ document.addEventListener('DOMContentLoaded', () => {
         generateWishlistRecipeBtn.classList.add('button-active-animation');
         setTimeout(() => {
             generateWishlistRecipeBtn.classList.remove('button-active-animation');
-        }, 200); // Faster animation duration
+        }, 200); 
     });
 
     clearWishlistBtn.addEventListener('click', () => {
         if (wishlist.length === 0) {
-            // Add shake animation if wishlist is empty
+ 
             clearWishlistBtn.classList.add('shake-animation');
             setTimeout(() => {
                 clearWishlistBtn.classList.remove('shake-animation');
-            }, 300); // Match animation duration
+            }, 300);
         } else {
-            // Add subtle click animation if wishlist has items
+
             clearWishlist();
             clearWishlistBtn.classList.add('button-active-animation');
             setTimeout(() => {
                 clearWishlistBtn.classList.remove('button-active-animation');
-            }, 200); // Faster animation duration
+            }, 200); 
         }
     });
 
@@ -883,9 +885,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const mobileSearchInput = document.getElementById('mobile-search-input');
     const desktopSearchInput = document.getElementById('desktop-search-input');
+    const clearMobileSearchBtn = document.getElementById('clear-mobile-search-btn');
+    const clearDesktopSearchBtn = document.getElementById('clear-desktop-search-btn');
 
     const handleSearchInput = (event) => {
         searchTerm = event.target.value;
+        selectedCategory = 'Toate';
+        renderCategoryButtons();
+        renderProducts();
+        if (event.target.id === 'mobile-search-input') {
+            if (searchTerm.length > 0) {
+                clearMobileSearchBtn.classList.remove('hidden');
+            } else {
+                clearMobileSearchBtn.classList.add('hidden');
+            }
+        } else if (event.target.id === 'desktop-search-input') {
+            if (searchTerm.length > 0) {
+                clearDesktopSearchBtn.classList.remove('hidden');
+            } else {
+                clearDesktopSearchBtn.classList.add('hidden');
+            }
+        }
+    };
+
+    const clearSearch = (inputElement, clearButtonElement) => {
+        inputElement.value = '';
+        searchTerm = '';
+        clearButtonElement.classList.add('hidden');
         selectedCategory = 'Toate';
         renderCategoryButtons();
         renderProducts();
@@ -893,6 +919,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mobileSearchInput.addEventListener('input', handleSearchInput);
     desktopSearchInput.addEventListener('input', handleSearchInput);
+
+    clearMobileSearchBtn.addEventListener('click', () => clearSearch(mobileSearchInput, clearMobileSearchBtn));
+    clearDesktopSearchBtn.addEventListener('click', () => clearSearch(desktopSearchInput, clearDesktopSearchBtn));
+
+
+    if (mobileSearchInput.value.length > 0) {
+        clearMobileSearchBtn.classList.remove('hidden');
+    }
+    if (desktopSearchInput.value.length > 0) {
+        clearDesktopSearchBtn.classList.remove('hidden');
+    }
 });
 
 window.addEventListener('resize', () => {
@@ -900,6 +937,11 @@ window.addEventListener('resize', () => {
     const mobileToggleDiv = document.querySelector('.md\\:hidden');
     const mobileSearchContainer = document.getElementById('mobile-search-container');
     const desktopSearchContainer = document.getElementById('desktop-search-container');
+    const mobileSearchInput = document.getElementById('mobile-search-input');
+    const desktopSearchInput = document.getElementById('desktop-search-input');
+    const clearMobileSearchBtn = document.getElementById('clear-mobile-search-btn');
+    const clearDesktopSearchBtn = document.getElementById('clear-desktop-search-btn');
+
 
     if (window.innerWidth < 768) {
         mobileToggleDiv.classList.remove('hidden');
@@ -910,6 +952,13 @@ window.addEventListener('resize', () => {
             categoryButtonsContainer.classList.remove('is-expanded');
             document.getElementById('category-toggle-btn').classList.remove('rotated');
         }
+
+        if (mobileSearchInput.value.length > 0) {
+            clearMobileSearchBtn.classList.remove('hidden');
+        } else {
+            clearMobileSearchBtn.classList.add('hidden');
+        }
+        clearDesktopSearchBtn.classList.add('hidden'); 
     } else {
         mobileToggleDiv.classList.add('hidden');
         mobileToggleDiv.classList.remove('flex');
@@ -918,22 +967,12 @@ window.addEventListener('resize', () => {
         categoryButtonsContainer.classList.remove('is-expanded');
         document.getElementById('category-toggle-btn').classList.remove('rotated');
         isCategoryNavExpanded = false;
-    }
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-    const mobileToggleDiv = document.querySelector('.md\\:hidden');
-    const mobileSearchContainer = document.getElementById('mobile-search-container');
-    const desktopSearchContainer = document.getElementById('desktop-search-container');
-    if (window.innerWidth < 768) {
-        mobileToggleDiv.classList.remove('hidden');
-        mobileToggleDiv.classList.add('flex');
-        mobileSearchContainer.classList.remove('hidden');
-        desktopSearchContainer.classList.add('hidden');
-    } else {
-        mobileToggleDiv.classList.add('hidden');
-        mobileToggleDiv.classList.remove('flex');
-        mobileSearchContainer.classList.add('hidden');
-        desktopSearchContainer.classList.remove('hidden');
+        if (desktopSearchInput.value.length > 0) {
+            clearDesktopSearchBtn.classList.remove('hidden');
+        } else {
+            clearDesktopSearchBtn.classList.add('hidden');
+        }
+        clearMobileSearchBtn.classList.add('hidden');
     }
 });
