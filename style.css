@@ -38,6 +38,13 @@ body {
     }
 }
 
+
+body.no-animations * {
+    transition: none !important;
+    animation: none !important;
+}
+
+
 body.dark-mode {
     background-color: #1a202c;
     color: #e2e8f0;
@@ -163,7 +170,7 @@ body.dark-mode #clear-desktop-search-btn {
 
 @keyframes buttonClickScale {
     0% { transform: scale(1); }
-    50% { transform: scale(1.01); }
+    50% { transform: scale(1.05); } 
     100% { transform: scale(1); }
 }
 
@@ -173,7 +180,7 @@ body.dark-mode #clear-desktop-search-btn {
 }
 
 .button-active-animation {
-    animation: buttonClickScale 0.2s ease-out;
+    animation: buttonClickScale 0.2s ease-out; 
 }
 
 .icon-active-rotation {
@@ -267,9 +274,9 @@ body.dark-mode #clear-desktop-search-btn {
     display: none;
     position: fixed;
     min-width: 180px;
-    background-color: rgba(255, 255, 255, 0.7); 
-    backdrop-filter: blur(12px); 
-    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border-radius: 0.5rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 100;
@@ -278,7 +285,7 @@ body.dark-mode #clear-desktop-search-btn {
     pointer-events: none;
 }
 body.dark-mode #custom-context-menu {
-    background-color: rgba(45, 55, 72, 0.7); 
+    background-color: rgba(45, 55, 72, 0.5);
 }
 #custom-context-menu.show {
     display: block;

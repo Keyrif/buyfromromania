@@ -1,5 +1,5 @@
 const productsData = [
-    {
+   {
         id: 1,
         name: "Apă Borsec",
         category: "Apă",
@@ -162,16 +162,54 @@ const productsData = [
         location: "TIMISOARA"
     }
 ];
-
 let selectedCategory = 'Toate';
 let isCategoryNavExpanded = false;
 let searchTerm = '';
 
 let wishlist = [];
 const WISHLIST_STORAGE_KEY = 'buy_from_romania_wishlist';
+const ANIMATIONS_STORAGE_KEY = 'buy_from_romania_animations_enabled';
 const FOOD_CATEGORIES = ["Pâine", "Lactate", "Carne", "Dulciuri", "Făină și Zahăr", "Ulei și Oțet", "Băuturi"];
 
 let currentRightClickedProductId = null;
+let animationsEnabled = true; 
+
+function loadAnimationsState() {
+    const storedState = localStorage.getItem(ANIMATIONS_STORAGE_KEY);
+    if (storedState !== null) {
+        animationsEnabled = JSON.parse(storedState);
+    } else {
+        animationsEnabled = true; 
+    }
+    toggleAnimations(false); 
+}
+
+function saveAnimationsState() {
+    localStorage.setItem(ANIMATIONS_STORAGE_KEY, JSON.stringify(animationsEnabled));
+}
+
+function toggleAnimations(shouldToggleState = true) {
+    if (shouldToggleState) {
+        animationsEnabled = !animationsEnabled;
+        saveAnimationsState();
+    }
+
+    const body = document.body;
+    const toggleButton = document.getElementById('context-toggle-animations');
+
+    if (animationsEnabled) {
+        body.classList.remove('no-animations');
+        if (toggleButton) {
+            toggleButton.textContent = 'Dezactivează Animații';
+        }
+    } else {
+        body.classList.add('no-animations');
+        if (toggleButton) {
+            toggleButton.textContent = 'Activează Animații';
+        }
+    }
+}
+
 
 function loadWishlist() {
     const storedWishlist = localStorage.getItem(WISHLIST_STORAGE_KEY);
@@ -209,19 +247,31 @@ function addToWishlist(productId) {
 function removeFromWishlist(productId) {
     const itemToRemoveElement = document.querySelector(`#wishlist-items-container .wishlist-item-card button[data-product-id="${productId}"]`);
     
-
-    if (itemToRemoveElement) {
+    if (itemToRemoveElement && animationsEnabled) {
         itemToRemoveElement.classList.add('button-active-animation');
         setTimeout(() => {
             itemToRemoveElement.classList.remove('button-active-animation');
-        }, 200); 
+        }, 200);
     }
 
     if (itemToRemoveElement && itemToRemoveElement.closest('.wishlist-item-card')) {
         const parentCard = itemToRemoveElement.closest('.wishlist-item-card');
-        parentCard.classList.add('wishlist-item-removing');
-
-        parentCard.addEventListener('animationend', () => {
+        if (animationsEnabled) {
+            parentCard.classList.add('wishlist-item-removing');
+            parentCard.addEventListener('animationend', () => {
+                parentCard.remove();
+                wishlist = wishlist.filter(id => id !== productId);
+                saveWishlist();
+                const modalButton = document.getElementById('modal-add-to-wishlist-btn');
+                if (modalButton && parseInt(modalButton.getAttribute('data-product-id')) === productId) {
+                    updateModalWishlistButton(productId);
+                }
+                if (wishlist.length === 0) {
+                    document.getElementById('empty-wishlist-message').classList.remove('hidden');
+                }
+                renderProducts();
+            }, { once: true });
+        } else {
             parentCard.remove();
             wishlist = wishlist.filter(id => id !== productId);
             saveWishlist();
@@ -233,7 +283,7 @@ function removeFromWishlist(productId) {
                 document.getElementById('empty-wishlist-message').classList.remove('hidden');
             }
             renderProducts();
-        }, { once: true });
+        }
     } else {
         wishlist = wishlist.filter(id => id !== productId);
         saveWishlist();
@@ -371,10 +421,12 @@ function updateModalWishlistButton(productId) {
         modalWishlistBtn.disabled = false;
         modalWishlistBtn.onclick = () => {
 
-            modalWishlistBtn.classList.add('button-active-animation');
-            setTimeout(() => {
-                modalWishlistBtn.classList.remove('button-active-animation');
-            }, 200); 
+            if (animationsEnabled) {
+                modalWishlistBtn.classList.add('button-active-animation');
+                setTimeout(() => {
+                    modalWishlistBtn.classList.remove('button-active-animation');
+                }, 200); 
+            }
             removeFromWishlist(productId);
             updateModalWishlistButton(productId);
         };
@@ -385,10 +437,13 @@ function updateModalWishlistButton(productId) {
         modalWishlistBtn.disabled = false;
         modalWishlistBtn.onclick = () => {
             addToWishlist(productId);
-            modalWishlistBtn.classList.add('button-active-animation');
-            setTimeout(() => {
-                modalWishlistBtn.classList.remove('button-active-animation');
-            }, 200); 
+
+            if (animationsEnabled) {
+                modalWishlistBtn.classList.add('button-active-animation');
+                setTimeout(() => {
+                    modalWishlistBtn.classList.remove('button-active-animation');
+                }, 200); 
+            }
             updateModalWishlistButton(productId);
         };
     }
@@ -420,10 +475,12 @@ function showProductModal(product) {
         generateRecipeBtn.classList.remove('hidden');
         generateRecipeBtn.onclick = () => {
             generateRecipe(product.name);
-            generateRecipeBtn.classList.add('button-active-animation');
-            setTimeout(() => {
-                generateRecipeBtn.classList.remove('button-active-animation');
-            }, 200); 
+            if (animationsEnabled) {
+                generateRecipeBtn.classList.add('button-active-animation');
+                setTimeout(() => {
+                    generateRecipeBtn.classList.remove('button-active-animation');
+                }, 200); 
+            }
         };
     } else {
         generateRecipeBtn.classList.add('hidden');
@@ -513,7 +570,7 @@ async function generateRecipe(productName) {
     let chatHistory = [];
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
     const payload = { contents: chatHistory };
-    const apiKey = "AIzaSyDe9JFtcK_xdix412bsD3KwJ5x-nTdmb3Q";
+    const apiKey = "";
 
     try {
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -572,7 +629,7 @@ async function generateWishlistRecipe() {
     let chatHistory = [];
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
     const payload = { contents: chatHistory };
-    const apiKey = "AIzaSyDe9JFtcK_xdix412bsD3KwJ5x-nTdmb3Q";
+    const apiKey = "";
 
     try {
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -699,6 +756,10 @@ class Spark {
 }
 
 function animateSparks() {
+    if (!animationsEnabled) {
+        sparkCtx.clearRect(0, 0, sparkCanvas.width, sparkCanvas.height);
+        return;
+    }
     sparkCtx.clearRect(0, 0, sparkCanvas.width, sparkCanvas.height);
 
     for (let i = sparks.length - 1; i >= 0; i--) {
@@ -714,12 +775,12 @@ function animateSparks() {
     requestAnimationFrame(animateSparks);
 }
 
-animateSparks();
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('current-year').textContent = new Date().getFullYear();
     
     loadWishlist();
+    loadAnimationsState(); 
     renderCategoryButtons();
     renderProducts();
     updateWishlistCountBadge();
@@ -735,20 +796,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const isDarkMode = body.classList.contains('dark-mode');
         setTheme(!isDarkMode);
 
-        themeToggleBtn.classList.add('button-active-animation');
-        themeIcon.classList.add('icon-active-rotation');
+        if (animationsEnabled) {
+            themeToggleBtn.classList.add('button-active-animation');
+            themeIcon.classList.add('icon-active-rotation');
 
-        setTimeout(() => {
-            themeToggleBtn.classList.remove('button-active-animation');
-            themeIcon.classList.remove('icon-active-rotation');
-        }, 400);
+            setTimeout(() => {
+                themeToggleBtn.classList.remove('button-active-animation');
+                themeIcon.classList.remove('icon-active-rotation');
+            }, 400);
 
-        const rect = themeToggleBtn.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+            const rect = themeToggleBtn.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
 
-        for (let i = 0; i < 20; i++) {
-            sparks.push(new Spark(centerX, centerY));
+            for (let i = 0; i < 20; i++) {
+                sparks.push(new Spark(centerX, centerY));
+            }
         }
     });
 
@@ -768,27 +831,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     generateWishlistRecipeBtn.addEventListener('click', () => {
         generateWishlistRecipe();
-        // Add subtle click animation
-        generateWishlistRecipeBtn.classList.add('button-active-animation');
-        setTimeout(() => {
-            generateWishlistRecipeBtn.classList.remove('button-active-animation');
-        }, 200); 
+        if (animationsEnabled) {
+            generateWishlistRecipeBtn.classList.add('button-active-animation');
+            setTimeout(() => {
+                generateWishlistRecipeBtn.classList.remove('button-active-animation');
+            }, 200);
+        }
     });
 
     clearWishlistBtn.addEventListener('click', () => {
         if (wishlist.length === 0) {
- 
-            clearWishlistBtn.classList.add('shake-animation');
-            setTimeout(() => {
-                clearWishlistBtn.classList.remove('shake-animation');
-            }, 300);
+            if (animationsEnabled) {
+                clearWishlistBtn.classList.add('shake-animation');
+                setTimeout(() => {
+                    clearWishlistBtn.classList.remove('shake-animation');
+                }, 300);
+            }
         } else {
-
             clearWishlist();
-            clearWishlistBtn.classList.add('button-active-animation');
-            setTimeout(() => {
-                clearWishlistBtn.classList.remove('button-active-animation');
-            }, 200); 
+            if (animationsEnabled) {
+                clearWishlistBtn.classList.add('button-active-animation');
+                setTimeout(() => {
+                    clearWishlistBtn.classList.remove('button-active-animation');
+                }, 200);
+            }
         }
     });
 
@@ -797,33 +863,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const contextAddToWishlistBtn = document.getElementById('context-add-to-wishlist');
     const contextSuggestRecipeBtn = document.getElementById('context-suggest-recipe');
     const contextViewDetailsBtn = document.getElementById('context-view-details');
+    const contextToggleAnimationsBtn = document.getElementById('context-toggle-animations');
     const productsContainer = document.getElementById('products-container');
 
-    productsContainer.addEventListener('contextmenu', (event) => {
-        const productCard = event.target.closest('.product-card-container');
-        if (productCard) {
-            event.preventDefault();
+    toggleAnimations(false); 
 
+    document.addEventListener('contextmenu', (event) => {
+        event.preventDefault(); 
+
+        const productCard = event.target.closest('.product-card-container');
+        contextProductName.classList.add('hidden');
+        contextAddToWishlistBtn.classList.add('hidden');
+        contextSuggestRecipeBtn.classList.add('hidden');
+        contextViewDetailsBtn.classList.add('hidden');
+
+        if (productCard) {
             currentRightClickedProductId = parseInt(productCard.getAttribute('data-product-id'));
             const product = productsData.find(p => p.id === currentRightClickedProductId);
 
             if (product) {
                 contextProductName.textContent = product.name;
+                contextProductName.classList.remove('hidden');
             } else {
                 contextProductName.textContent = '';
             }
 
-            customContextMenu.style.left = `${event.clientX}px`;
-            customContextMenu.style.top = `${event.clientY}px`;
 
-            const menuWidth = customContextMenu.offsetWidth;
-            const menuHeight = customContextMenu.offsetHeight;
-            if (event.clientX + menuWidth > window.innerWidth) {
-                customContextMenu.style.left = `${window.innerWidth - menuWidth - 10}px`;
-            }
-            if (event.clientY + menuHeight > window.innerHeight) {
-                customContextMenu.style.top = `${window.innerHeight - menuHeight - 10}px`;
-            }
+            contextAddToWishlistBtn.classList.remove('hidden');
+            contextViewDetailsBtn.classList.remove('hidden');
 
             if (isProductInWishlist(currentRightClickedProductId)) {
                 contextAddToWishlistBtn.textContent = 'Elimină din Wishlist';
@@ -852,8 +919,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 contextSuggestRecipeBtn.onclick = null;
             }
             
-            customContextMenu.classList.add('show');
+        } else {
+
+            currentRightClickedProductId = null;
         }
+
+        contextToggleAnimationsBtn.classList.remove('hidden');
+        contextToggleAnimationsBtn.onclick = () => {
+            toggleAnimations();
+            customContextMenu.classList.remove('show');
+        };
+
+
+        customContextMenu.style.left = `${event.clientX}px`;
+        customContextMenu.style.top = `${event.clientY}px`;
+
+        const menuWidth = customContextMenu.offsetWidth;
+        const menuHeight = customContextMenu.offsetHeight;
+        if (event.clientX + menuWidth > window.innerWidth) {
+            customContextMenu.style.left = `${window.innerWidth - menuWidth - 10}px`;
+        }
+        if (event.clientY + menuHeight > window.innerHeight) {
+            customContextMenu.style.top = `${window.innerHeight - menuHeight - 10}px`;
+        }
+        
+        customContextMenu.classList.add('show');
     });
 
     document.addEventListener('click', (event) => {
@@ -893,6 +983,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedCategory = 'Toate';
         renderCategoryButtons();
         renderProducts();
+
         if (event.target.id === 'mobile-search-input') {
             if (searchTerm.length > 0) {
                 clearMobileSearchBtn.classList.remove('hidden');
