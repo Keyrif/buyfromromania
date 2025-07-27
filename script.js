@@ -1,154 +1,154 @@
 const productsData = [
     {
         id: 1,
-        name: "Apă Minerală Borsec",
+        name: "Apă Borsec",
         category: "Apă",
-        store: "Mega Image",
-        image: "https://depozituldeapa.ro/wp-content/uploads/2022/04/depozituldeapaapaplata26.jpg",
-        description: "Apă minerală naturală carbogazificată, bogată în minerale esențiale. Perfectă pentru hidratare zilnică sau pentru a însoți mesele.",
+        store: "ORICE MAGAZIN",
+        image: "https://lituanicawholesale.com/image/cache/catalog/litaunica-image/Borsec_-_Mineral_Still_Water_0.5_L-600x600.png",
+        description: "Apă naturală carbogazificată, bogată în minerale esențiale. Perfectă pentru hidratare zilnică sau pentru a însoți mesele.",
         location: "HARGHITA"
     },
     {
         id: 2,
-        name: "Apă Plată Aqua Carpatica",
+        name: "Apă Perla Harghitei",
         category: "Apă",
-        store: "Carrefour",
-        image: "https://placehold.co/150x150/ADD8E6/FFFFFF?text=Aqua+Carpatica",
-        description: "Apă minerală naturală plată, cu un conținut scăzut de sodiu, ideală pentru bebeluși și persoanele cu dietă specială. Pură și echilibrată.",
-        location: "SUCEAVA"
+        store: "ORICE MAGAZIN",
+        image: "https://devincebeau.ro/wp-content/uploads/2025/02/Perla-Harghitei-apa-plata-5-litri.png",
+        description: "Produsă în zona Harghita, izvorul este captat și monitorizat riguros conform standardelor de calitate",
+        location: "HARGHITA"
     },
     {
         id: 3,
-        name: "Pâine Albă Feliată",
-        category: "Pâine",
-        store: "Lidl",
-        image: "https://placehold.co/150x150/F0E68C/000000?text=Paine+Alba",
-        description: "Pâine albă feliată, proaspătă și pufoasă, ideală pentru sandvișuri sau toast.",
-        location: "BUCURESTI"
+        name: "Apă La Fântâna",
+        category: "Apă",
+        store: "ONLINE",
+        image: "https://lafantana.ro/media/magefan_blog/1-5-apa-plata-necarbo.png",
+        description: "Se comandă exclusiv pe site-ul lafantana.ro, unde poți opta pentru livrare lunară acasă sau la birou. Produsă la Tălmaciu (județul Sibiu), testată permanent pentru conformitate și puritate; este un brand românesc important pentru apa plată și minerală.",
+        location: "SIBIU"
     },
     {
         id: 4,
-        name: "Pâine Integrală",
-        category: "Pâine",
-        store: "Kaufland",
-        image: "https://placehold.co/150x150/DAA520/FFFFFF?text=Paine+Integrala",
-        description: "Pâine integrală bogată în fibre, preparată din cereale integrale. Contribuie la o digestie sănătoasă și oferă energie pe termen lung.",
-        location: "CLUJ"
+        name: "Apă Cumpana",
+        category: "Apă",
+        store: "ONLINE",
+        image: "https://cumpana.ro/cdn/shop/files/11L_720x.png?v=1726754312",
+        description: "Se poate comanda direct de pe site-ul oficial cumpana.ro. Companie românească, cu capital 100% românesc, oferind apă de izvor pură, cu pH usor alcalin (8.2).",
+        location: "ILFOV, Ștefăneștii de Jos"
     },
     {
         id: 5,
-        name: "Bere Ursus Premium",
+        name: "Bere Ciucaș",
         category: "Băuturi",
-        store: "Auchan",
-        image: "https://placehold.co/150x150/FFA07A/FFFFFF?text=Ursus",
-        description: "Bere lager românească, cu gust echilibrat și răcoritor. Perfectă pentru a te relaxa după o zi lungă sau pentru a o savura alături de prieteni.",
-        location: "CLUJ"
-    },
-    {
-        id: 6,
-        name: "Vin Roșu Fetească Neagră",
-        category: "Băuturi",
-        store: "Profy",
-        image: "https://placehold.co/150x150/8B0000/FFFFFF?text=Feteasca+Neagra",
-        description: "Vin roșu sec, cu arome intense de fructe de pădure și note subtile de condimente. Ideal pentru a însoți preparate din carne roșie sau brânzeturi maturate.",
-        location: "VRANCEA"
-    },
-    {
-        id: 7,
-        name: "Lapte 3.5% grăsime",
-        category: "Lactate",
-        store: "Mega Image",
-        image: "https://placehold.co/150x150/E0FFFF/000000?text=Lapte",
-        description: "Lapte proaspăt, integral, cu 3.5% grăsime. O sursă excelentă de calciu și proteine, ideal pentru micul dejun sau în cafea.",
+        store: "ORICE MAGAZIN",
+        image: "https://www.alexim.ro/wp-content/uploads/2024/03/BERE-CIUCAS-STICLA-SGR-0.33L-4.6-24-BBAX1728-BUCPALET.png",
+        description: "Bere lejeră, foarte populară pentru prețul accesibil și gustul proaspăt.",
         location: "BRASOV"
     },
     {
-        id: 8,
-        name: "Iaurt Natural",
-        category: "Lactate",
-        store: "Lidl",
-        image: "https://placehold.co/150x150/F5DEB3/000000?text=Iaurt",
-        description: "Iaurt cremos, fără aditivi, preparat din lapte proaspăt. Perfect pentru o gustare sănătoasă sau ca bază pentru sosuri și dressing-uri.",
-        location: "SIBIU"
-    },
-    {
-        id: 9,
-        name: "Salam de Sibiu",
-        category: "Carne",
+        id: 6,
+        name: "Bere Timișoreana",
+        category: "Băuturi",
         store: "ORICE MAGAZIN",
-        image: "https://placehold.co/150x150/8B4513/FFFFFF?text=Salam+Sibiu",
-        description: "Salam tradițional românesc, afumat și maturat, cu o aromă distinctă și o textură fină. O delicatesă apreciată în toată țara.",
-        location: "SIBIU"
+        image: "https://www.profi.ro/wp-content/uploads/2025/05/TIMISOREANA-BERE-PET-2.25L-339x260.png?x84925",
+        description: "Cea mai veche bere din România, gust echilibrat, ingredient 100% natural.",
+        location: "TIMISOARA, BUZAU, BRASOV"
     },
     {
-        id: 10,
-        name: "Cârnați de Pleșcoi",
-        category: "Carne",
+        id: 7,
+        name: "Vin Cotnari",
+        category: "Băuturi",
         store: "ORICE MAGAZIN",
-        image: "https://placehold.co/150x150/A0522D/FFFFFF?text=Carnati+Plescoi",
-        description: "Cârnați picanți, specifici zonei Buzăului, preparați după o rețetă autentică. Ideali pentru grătar sau fierți, alături de o mămăliguță.",
-        location: "BUZAU"
-    },
-    {
-        id: 11,
-        name: "Telemea de Ibănești",
-        category: "Lactate",
-        store: "Mega Image",
-        image: "https://placehold.co/150x150/D2B48C/000000?text=Telemea+Ibanesti",
-        description: "Telemea maturată, cu gust intens și sărat, specifică zonei Ibănești. Excelentă în salate sau ca aperitiv.",
-        location: "MURES"
-    },
-    {
-        id: 12,
-        name: "Mici de Grătar",
-        category: "Carne",
-        store: "Lidl",
-        image: "https://placehold.co/150x150/8B0000/FFFFFF?text=Mici",
-        description: "Mici tradiționali românești, pregătiți pentru grătar. Un preparat iconic, perfect pentru orice ocazie festină.",
-        location: "BUCURESTI"
-    },
-    {
-        id: 13,
-        name: "Făină Albă de Grâu",
-        category: "Făină și Zahăr",
-        store: "Kaufland",
-        image: "https://placehold.co/150x150/F5F5DC/000000?text=Faina+Alba",
-        description: "Făină albă de grâu, tip 000, ideală pentru patiserie și cofetărie. Asigură o textură fină și pufoasă preparatelor.",
-        location: "BRAILA"
-    },
-    {
-        id: 14,
-        name: "Zahăr Cristal",
-        category: "Făină și Zahăr",
-        store: "Auchan",
-        image: "https://placehold.co/150x150/FFFFFF/000000?text=Zahar+Cristal",
-        description: "Zahăr alb cristal, perfect pentru îndulcirea băuturilor și prepararea deserturilor.",
-        location: "GALATI"
-    },
-    {
-        id: 15,
-        name: "Ulei de Floarea Soarelui",
-        category: "Ulei și Oțet",
-        store: "Carrefour",
-        image: "https://placehold.co/150x150/FFD700/000000?text=Ulei+Floarea+Soarelui",
-        description: "Ulei rafinat de floarea soarelui, ideal pentru gătit și prăjit. Un ingredient esențial în orice bucătărie.",
+        image: "https://www.cotnari.ro/continut/uploads/2017/07/Feteasca-Alba-demidulce-COTNARI-SA.png",
+        description: "Cei mai faimoși pentru Grasă de Cotnari, vin alb dulce/ demidulce, aromat, celebru internațional; alte soiuri: Fetească Albă, Busuioacă de Bohotin.",
         location: "IASI"
     },
     {
-        id: 16,
-        name: "Oțet de Vin",
-        category: "Ulei și Oțet",
-        store: "Profy",
-        image: "https://placehold.co/150x150/800000/FFFFFF?text=Otet+Vin",
-        description: "Oțet de vin roșu, cu o aromă bogată și aciditate echilibrată. Perfect pentru salate și marinade.",
+        id: 8,
+        name: "Vin Jidvei",
+        category: "Băuturi",
+        store: "ORICE MAGAZIN",
+        image: "https://www.jidvei.ro/wp-content/uploads/2020/04/spumant-jidvei-extra-dry-2023-600x800-1.png",
+        description: "Cel mai mare producător de vin alb, recunoscut pentru premium și spumante, game precum Owner's Choice, Mysterium sau Clasic. Soiuri: Fetească Regală, Sauvignon Blanc, Traminer, Riesling, Chardonnay. Vinuri seci, demi-seci sau dulci.",
+        location: "Valea Târnavelor, județul Alba (comuna Jidvei)"
+    },
+    {
+        id: 9,
+        name: "Lapte Napolact",
+        category: "Lactate",
+        store: "ORICE MAGAZIN",
+        image: "https://supereco.ro/932-home_default/lapte-35-cutie-1-l-napolact.jpg",
+        description: "Fabrica fondată la Cluj în 1905, astăzi parte a FrieslandCampina, colectează lapte exclusiv din Ardeal, folosind rețete tradiționale și metode moderne. Produs 100% din lapte românesc, prelucrat la standarde europene.",
+        location: "CLUJ, MURES"
+    },
+    {
+        id: 10,
+        name: "Zahăr Mărgăritar",
+        category: "Făină și Zahăr",
+        store: "ORICE MAGAZIN",
+        image: "https://auchan.vtexassets.com/arquivos/ids/160361-800-800?v=637980663879170000&width=800&height=800&aspect=true",
+        description: "Cârnați picanți, specifici zonei Buzăului, preparați după o rețetă autentică. Ideali pentru grătar sau fierți, alături de o mămăliguță.",
+        location: "NEAMT, orasul ROMAN"
+    },
+    {
+        id: 11,
+        name: "Lapte Zuzu",
+        category: "Lactate",
+        store: "ORICE MAGAZIN",
+        image: "https://www.alexim.ro/wp-content/uploads/2023/04/ALB-LAPTE-1L-ZUZU-3.5-ROSU.png",
+        description: "Zuzu este cel mai vândut brand de lapte din România, produs la Alba Iulia cu materie primă colectată de la ferme locale. Lapte proaspăt, pasteurizat, cu mai multe variante de grăsime.",
+        location: "ALBA"
+    },
+    {
+        id: 12,
+        name: "Făina Pambac",
+        category: "Făină și Zahăr",
+        store: "ORICE MAGAZIN",
+        image: "https://odorest.ro/files/image/2018-02-23-10-22-03_145a8fcf2b929f2.png.png",
+        description: "Companie fondată în 1968, cu una dintre cele mai apreciate mori de grâu din țară. Fabrica Pambac din Bacău folosește tehnologii avansate pentru a produce făină, paste și alte produse de panificație cu materie primă locală.",
+        location: "BACAU"
+    },
+    {
+        id: 13,
+        name: "Făină Băneasa",
+        category: "Făină și Zahăr",
+        store: "ORICE MAGAZIN",
+        image: "https://odorest.ro/files/image/2018-02-21-10-29-07_205a8d2dd376a2c.png.png",
+        description: "Producător lider pe piața de morărit, cu moară modernă în București. Oferă făină 100% din grâu românesc de cea mai bună calitate, fără aditivi. Folosită în panificație și cofetărie, certificată și recunoscută pentru standardul înalt de siguranță alimentară.",
+        location: "BUCURESTI"
+    },
+    {
+        id: 14,
+        name: "Ciocolata Făgăraș",
+        category: "Dulciuri",
+        store: "ORICE MAGAZIN",
+        image: "https://pravalie.store/pub/media/catalog/product/cache/39e4a8825328a53d6e1f854af38fe862/1/0/100283.png",
+        description: "Este un brand produs de Kandia Dulce, unul dintre cei mai mari și vechi producători de dulciuri din România. Compania are facilități în București iar batoanele Făgăraș sunt fabricate local, având o rețetă consacrată din anii '60, apreciată de generații de români.",
+        location: "BUCURESTI"
+    },
+    {
+        id: 15,
+        name: "Eugenia",
+        category: "Dulciuri",
+        store: "ORICE MAGAZIN",
+        image: "https://auchan.vtexassets.com/arquivos/ids/168524/biscuiti-eugenia-cu-crema-de-cacao-36g-8841662529566.png?v=637988335033530000",
+        description: "Marca originală este produsă de compania Dobrogea (fabrica din Constanța), cu tradiție încă din 1947. Rețeta, producția și ingredientele rămân 100% românești, iar produsul este considerat un simbol al gustărilor din copilăria românilor.",
         location: "CONSTANTA"
+    },
+    {
+        id: 16,
+        name: "Cârnați de Porc Comtim",
+        category: "Carne",
+        store: "Comtim",
+        image: "https://www.comtim.ro/images/PP_tara.png",
+        description: "Aceste produse provin integral din fermele proprii Comtim din România și nu se găsesc în alte magazine sau lanțuri naționale. Magazinul oferă o gamă variată: carne proaspătă, produse marinate, toate garantând trasabilitate și prospețime, dedicate exclusiv clienților acestui punct de vânzare.",
+        location: "TIMISOARA"
     },
     {
         id: 17,
         name: "Ciocolata ROM",
         category: "Dulciuri",
         store: "ORICE MAGAZIN",
-        image: "https://www.delumani.de/cdn/shop/files/kandia-dulce-dulciuri-si-snacks-default-title-rom-baton-de-ciocolata-29423435776118.jpg?v=1727463628",
+        image: "https://i0.wp.com/romprod.uk/wp-content/uploads/2023/10/autentic-ciocolata-lapte-36g.png?fit=600%2C600&ssl=1",
         description: "Producția are loc la fabrica Kandia Dulce din București, pe Șoseaua Viilor nr.20, Sector 5. Kandia Dulce este cel mai mare producător român de dulciuri, deținând brandul ROM încă de la lansarea acestuia în 1964, iar batoanele și toate sortimentele ROM continuă să fie fabricate local pe linia de producție dedicată din București.",
         location: "BUCURESTI"
     },

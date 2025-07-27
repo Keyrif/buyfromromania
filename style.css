@@ -31,28 +31,13 @@ body {
         transform: translateX(0);
     }
 }
-
-
-::-webkit-scrollbar {
-    width: 12px;
+body::-webkit-scrollbar {
+    display: none;
 }
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
+body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #002B7F 0%, #FCD116 50%, #CE1126 100%);
-    border-radius: 10px;
-
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, #002B7F 0%, #FCD116 50%, #CE1126 100%);
-
-}
-
 
 body.dark-mode {
     background-color: #1a202c;
@@ -103,16 +88,16 @@ body.dark-mode #close-recipe-modal-btn {
     color: #cbd5e0;
 }
 body.dark-mode #theme-toggle {
-    background-color: rgba(45, 55, 72, 0.7);
+    background-color: rgba(45, 55, 72, 0.7); 
     color: #e2e8f0;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); 
 }
 body.dark-mode #view-wishlist-btn {
-    background-color: rgba(45, 55, 72, 0.7);
+    background-color: rgba(45, 55, 72, 0.7); 
     color: #e2e8f0;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); 
 }
 body.dark-mode .add-to-wishlist-btn {
     background-color: #a0aec0;
@@ -235,15 +220,15 @@ body.dark-mode #clear-desktop-search-btn {
     bottom: 1rem;
     right: 90px;
     z-index: 50;
-    background-color: rgba(59, 130, 246, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(59, 130, 246, 0.7); 
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); 
 }
 
 #theme-toggle {
-    background-color: rgba(59, 130, 246, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(59, 130, 246, 0.7); 
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); 
 }
 
 
