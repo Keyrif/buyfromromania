@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUY FROM ROMANIA - Produse Romanesti</title>
+    <title>BUY FROM ROMANIA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -48,9 +48,7 @@
             scrollbar-width: none;
         }
 
-        .romanian-flag-gradient {
-            background: linear-gradient(to right, #002B7F, #FCD116, #CE1126);
-        }
+        /* Removed romanian-flag-gradient class */
 
         body.dark-mode {
             background-color: #1a202c;
@@ -229,8 +227,13 @@
 </head>
 <body class="min-h-screen bg-gray-50 flex flex-col">
 
-    <header class="romanian-flag-gradient p-6 shadow-lg rounded-b-2xl relative">
-        <div class="container mx-auto text-center">
+    <header class="p-6 shadow-lg rounded-b-2xl relative overflow-hidden">
+        <div class="absolute inset-0 flex">
+            <div class="w-1/3 bg-[#002B7F]"></div> <!-- Blue -->
+            <div class="w-1/3 bg-[#FCD116]"></div> <!-- Yellow -->
+            <div class="w-1/3 bg-[#CE1126]"></div> <!-- Red -->
+        </div>
+        <div class="container mx-auto text-center relative z-10">
             <h1 class="text-white text-5xl font-extrabold tracking-tight mb-4">
                 <span class="block animate-fade-in">BUY FROM ROMANIA</span>
             </h1>
@@ -238,7 +241,7 @@
                 Descoperă produse autentice românești!
             </p>
         </div>
-        <button id="theme-toggle" class="fixed bottom-4 right-4 bg-gray-200 text-gray-800 p-3 rounded-full shadow-lg
+        <button id="theme-toggle" class="fixed bottom-4 right-4 bg-gray-200 text-gray-800 px-5 py-3 rounded-full shadow-lg
                                          transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none z-50">
             <span id="theme-icon">☀️</span>
         </button>
@@ -271,14 +274,14 @@
             Toate Produsele
         </h2>
 
-        <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div id="products-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             
         </div>
     </main>
 
     <footer class="bg-gray-800 text-white p-6 mt-8 rounded-t-2xl shadow-inner">
         <div class="container mx-auto text-center">
-            <p>&copy; <span id="current-year"></span> KEYRIF. Toate drepturile rezervate.</p>
+            <p>&copy; <span id="current-year"></span> BUY FROM ROMANIA. Toate drepturile rezervate.</p>
             <p class="text-sm text-gray-400 mt-2">
                 <a href="https://github.com/Keyrif" target="_blank" rel="noopener noreferrer" class="text-blue-300 hover:text-blue-100 transition-colors duration-200">Pagina Github KEYRIF</a>
             </p>
@@ -312,7 +315,7 @@
                         Adaugă la Wishlist
                     </button>
                     <button id="generate-recipe-btn" class="mt-4 ml-2 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 bg-green-500 hover:bg-green-600 hidden">
-                        Sugerează Rețetă (AI)
+                        ✨ Sugerează Rețetă
                     </button>
                 </div>
             </div>
@@ -333,10 +336,10 @@
             </div>
             <p id="empty-wishlist-message" class="text-center text-gray-600 mt-4 hidden">Wishlist-ul este gol.</p>
             <button id="generate-wishlist-recipe-btn" class="mt-4 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 bg-purple-500 hover:bg-purple-600 w-full">
-                Sugerează Rețetă cu Wishlist (AI)
+                ✨ Sugerează Rețetă cu Wishlist
             </button>
             <p class="text-center text-sm text-gray-500 italic mt-4 dark:text-gray-400">
-                * Lista este salvată doar în browserul tău și nu este disponibilă pe termen lung sau pe alte dispozitive.
+                * Această listă de dorințe este salvată doar în browserul tău și nu este disponibilă pe termen lung sau pe alte dispozitive.
             </p>
         </div>
     </div>
@@ -808,7 +811,7 @@
             let chatHistory = [];
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = "AIzaSyDe9JFtcK_xdix412bsD3KwJ5x-nTdmb3Q";
+            const apiKey = "";
 
             try {
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -867,7 +870,7 @@
             let chatHistory = [];
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = "AIzaSyDe9JFtcK_xdix412bsD3KwJ5x-nTdmb3Q";
+            const apiKey = "";
 
             try {
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
