@@ -313,13 +313,13 @@ body.dark-mode #desktop-search-input::placeholder {
     color: #a0aec0;
 }
 
-/* Added specific styles for light mode for these buttons */
+
 #generate-recipe-btn {
-    background-color: #22c55e; /* Tailwind green-500 */
+    background-color: #22c55e; 
 }
 #generate-wishlist-recipe-btn {
-    background-color: #22c55e; /* Tailwind green-500 */
+    background-color: #22c55e; 
 }
 #clear-wishlist-btn {
-    background-color: #ef4444; /* Tailwind red-500 */
+    background-color: #ef4444; 
 }
