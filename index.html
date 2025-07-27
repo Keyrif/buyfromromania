@@ -134,7 +134,6 @@
                 Descoperă produse autentice românești!
             </p>
         </div>
-        <!-- Dark mode toggle button - Moved to bottom right corner -->
         <button id="theme-toggle" class="fixed bottom-4 right-4 bg-gray-200 text-gray-800 p-3 rounded-full shadow-lg
                                          transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none z-50">
             ☀️
@@ -143,9 +142,7 @@
 
     <nav id="category-nav" class="shadow-md py-4 sticky top-0 z-10">
         <div class="container mx-auto px-4">
-            <!-- Mobile view: Selected category and toggle -->
             <div class="md:hidden flex justify-between items-center mb-2">
-                <!-- Changed text size, color, and added text-center -->
                 <span id="mobile-selected-category" class="w-full text-center text-2xl font-bold text-blue-600">Toate</span>
                 <button id="category-toggle-btn" class="absolute right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 transition-transform duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform rotate-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -154,7 +151,6 @@
                 </button>
             </div>
 
-            <!-- Desktop view / Expanded mobile view: All category buttons -->
             <div id="category-buttons-container" class="flex flex-wrap justify-center gap-3">
                 
             </div>
@@ -173,7 +169,7 @@
 
     <footer class="bg-gray-800 text-white p-6 mt-8 rounded-t-2xl shadow-inner">
         <div class="container mx-auto text-center">
-            <p>&copy; <span id="current-year"></span> KEYRIF. Toate drepturile rezervate.</p>
+            <p>&copy; <span id="current-year"></span> BUY FROM ROMANIA. Toate drepturile rezervate.</p>
             <p class="text-sm text-gray-400 mt-2">
                 Creat cu pasiune pentru produsele românești.
             </p>
@@ -198,6 +194,7 @@
                 <div class="text-center md:text-left">
                     <h2 id="modal-product-name" class="text-3xl font-bold text-gray-800 mb-2"></h2>
                     <p id="modal-product-store" class="text-blue-600 text-lg font-medium mb-3"></p>
+                    <p id="modal-product-location" class="text-gray-700 text-lg mb-3"></p>
                     <p id="modal-product-description" class="text-gray-700 leading-relaxed"></p>
                 </div>
             </div>
@@ -211,8 +208,9 @@
                 name: "Apă Minerală Borsec",
                 category: "Apă",
                 store: "Mega Image",
-                image: "https://placehold.co/150x150/87CEEB/FFFFFF?text=Borsec",
-                description: "Apă minerală naturală carbogazificată, bogată în minerale esențiale. Perfectă pentru hidratare zilnică sau pentru a însoți mesele."
+                image: "https://depozituldeapa.ro/wp-content/uploads/2022/04/depozituldeapaapaplata26.jpg",
+                description: "Apă minerală naturală carbogazificată, bogată în minerale esențiale. Perfectă pentru hidratare zilnică sau pentru a însoți mesele.",
+                location: "HARGHITA"
             },
             {
                 id: 2,
@@ -220,7 +218,8 @@
                 category: "Apă",
                 store: "Carrefour",
                 image: "https://placehold.co/150x150/ADD8E6/FFFFFF?text=Aqua+Carpatica",
-                description: "Apă minerală naturală plată, cu un conținut scăzut de sodiu, ideală pentru bebeluși și persoanele cu dietă specială. Pură și echilibrată."
+                description: "Apă minerală naturală plată, cu un conținut scăzut de sodiu, ideală pentru bebeluși și persoanele cu dietă specială. Pură și echilibrată.",
+                location: "SUCEAVA"
             },
             {
                 id: 3,
@@ -228,7 +227,8 @@
                 category: "Paine",
                 store: "Lidl",
                 image: "https://placehold.co/150x150/F0E68C/000000?text=Paine+Alba",
-                description: "Pâine albă moale și pufoasă, feliată pentru comoditate. Ideală pentru sandvișuri sau ca bază pentru bruschete."
+                description: "Pâine albă moale și pufoasă, feliată pentru comoditate. Ideală pentru sandvișuri sau ca bază pentru bruschete.",
+                location: "BUCURESTI"
             },
             {
                 id: 4,
@@ -236,7 +236,8 @@
                 category: "Paine",
                 store: "Kaufland",
                 image: "https://placehold.co/150x150/DAA520/FFFFFF?text=Paine+Integrala",
-                description: "Pâine integrală bogată în fibre, preparată din cereale integrale. Contribuie la o digestie sănătoasă și oferă energie pe termen lung."
+                description: "Pâine integrală bogată în fibre, preparată din cereale integrale. Contribuie la o digestie sănătoasă și oferă energie pe termen lung.",
+                location: "CLUJ"
             },
             {
                 id: 5,
@@ -244,7 +245,8 @@
                 category: "Bauturi",
                 store: "Auchan",
                 image: "https://placehold.co/150x150/FFA07A/FFFFFF?text=Ursus",
-                description: "Bere lager românească, cu gust echilibrat și răcoritor. Perfectă pentru a te relaxa după o zi lungă sau pentru a o savura alături de prieteni."
+                description: "Bere lager românească, cu gust echilibrat și răcoritor. Perfectă pentru a te relaxa după o zi lungă sau pentru a o savura alături de prieteni.",
+                location: "CLUJ"
             },
             {
                 id: 6,
@@ -252,7 +254,8 @@
                 category: "Bauturi",
                 store: "Profy",
                 image: "https://placehold.co/150x150/8B0000/FFFFFF?text=Feteasca+Neagra",
-                description: "Vin roșu sec, cu arome intense de fructe de pădure și note subtile de condimente. Ideal pentru a însoți preparate din carne roșie sau brânzeturi maturate."
+                description: "Vin roșu sec, cu arome intense de fructe de pădure și note subtile de condimente. Ideal pentru a însoți preparate din carne roșie sau brânzeturi maturate.",
+                location: "VRANCEA"
             },
             {
                 id: 7,
@@ -260,7 +263,8 @@
                 category: "Lactate",
                 store: "Mega Image",
                 image: "https://placehold.co/150x150/E0FFFF/000000?text=Lapte",
-                description: "Lapte proaspăt, integral, cu 3.5% grăsime. O sursă excelentă de calciu și proteine, ideal pentru micul dejun sau în cafea."
+                description: "Lapte proaspăt, integral, cu 3.5% grăsime. O sursă excelentă de calciu și proteine, ideal pentru micul dejun sau în cafea.",
+                location: "BRASOV"
             },
             {
                 id: 8,
@@ -268,23 +272,26 @@
                 category: "Lactate",
                 store: "Lidl",
                 image: "https://placehold.co/150x150/F5DEB3/000000?text=Iaurt",
-                description: "Iaurt cremos, fără aditivi, preparat din lapte proaspăt. Perfect pentru o gustare sănătoasă sau ca bază pentru sosuri și dressing-uri."
+                description: "Iaurt cremos, fără aditivi, preparat din lapte proaspăt. Perfect pentru o gustare sănătoasă sau ca bază pentru sosuri și dressing-uri.",
+                location: "SIBIU"
             },
             {
                 id: 9,
-                name: "Salam de Sibiu",
-                category: "Mezeluri",
-                store: "Carrefour",
-                image: "https://placehold.co/150x150/8B4513/FFFFFF?text=Salam+Sibiu",
-                description: "Salam tradițional românesc, afumat și maturat, cu o aromă distinctă și o textură fină. O delicatesă apreciată în toată țara."
+                name: "Carne de Porc",
+                category: "Carne",
+                store: "Comtim",
+                image: "https://www.comtim.ro/images/PP_cotlet.png",
+                description: "Aceste produse provin integral din fermele proprii Comtim din România și nu se găsesc în alte magazine sau lanțuri naționale. Magazinul oferă o gamă variată: carne proaspătă, produse marinate, toate garantând trasabilitate și prospețime, dedicate exclusiv clienților acestui punct de vânzare.",
+                location: "TIMISOARA"
             },
             {
                 id: 10,
-                name: "Cârnați de Pleșcoi",
-                category: "Mezeluri",
-                store: "Kaufland",
-                image: "https://placehold.co/150x150/A0522D/FFFFFF?text=Carnati+Plescoi",
-                description: "Cârnați picanți, specifici zonei Buzăului, preparați după o rețetă autentică. Ideali pentru grătar sau fierți, alături de o mămăliguță."
+                name: "Carnati de porc",
+                category: "Carne",
+                store: "ORICE MAGAZIN",
+                image: "https://auchan.vtexassets.com/arquivos/ids/267561-1200-1200?v=638512729676470000&width=1200&height=1200&aspect=true",
+                description: "Aceste produse provin integral din fermele proprii Comtim din România și nu se găsesc în alte magazine sau lanțuri naționale. Magazinul oferă o gamă variată: carne proaspătă, produse marinate, toate garantând trasabilitate și prospețime, dedicate exclusiv clienților acestui punct de vânzare.",
+                location: "TIMISOARA"
             },
             {
                 id: 11,
@@ -292,15 +299,17 @@
                 category: "Lactate",
                 store: "Mega Image",
                 image: "https://placehold.co/150x150/D2B48C/000000?text=Telemea+Ibanesti",
-                description: "Telemea maturată, cu gust intens și sărat, specifică zonei Ibănești. Excelentă în salate sau ca aperitiv."
+                description: "Telemea maturată, cu gust intens și sărat, specifică zonei Ibănești. Excelentă în salate sau ca aperitiv.",
+                location: "MURES"
             },
             {
                 id: 12,
                 name: "Mici de Grătar",
-                category: "Mezeluri",
+                category: "Carne",
                 store: "Lidl",
                 image: "https://placehold.co/150x150/8B0000/FFFFFF?text=Mici",
-                description: "Mici tradiționali românești, pregătiți pentru grătar. Un preparat iconic, perfect pentru orice ocazie festină."
+                description: "Mici tradiționali românești, pregătiți pentru grătar. Un preparat iconic, perfect pentru orice ocazie festină.",
+                location: "BUCURESTI"
             },
             {
                 id: 13,
@@ -308,7 +317,8 @@
                 category: "Făină și Zahăr",
                 store: "Kaufland",
                 image: "https://placehold.co/150x150/F5F5DC/000000?text=Faina+Alba",
-                description: "Făină albă de grâu, tip 000, ideală pentru patiserie și cofetărie. Asigură o textură fină și pufoasă preparatelor."
+                description: "Făină albă de grâu, tip 000, ideală pentru patiserie și cofetărie. Asigură o textură fină și pufoasă preparatelor.",
+                location: "BRAILA"
             },
             {
                 id: 14,
@@ -316,7 +326,8 @@
                 category: "Făină și Zahăr",
                 store: "Auchan",
                 image: "https://placehold.co/150x150/FFFFFF/000000?text=Zahar+Cristal",
-                description: "Zahăr alb cristal, perfect pentru îndulcirea băuturilor și prepararea deserturilor."
+                description: "Zahăr alb cristal, perfect pentru îndulcirea băuturilor și prepararea deserturilor.",
+                location: "GALATI"
             },
             {
                 id: 15,
@@ -324,7 +335,8 @@
                 category: "Ulei și Oțet",
                 store: "Carrefour",
                 image: "https://placehold.co/150x150/FFD700/000000?text=Ulei+Floarea+Soarelui",
-                description: "Ulei rafinat de floarea soarelui, ideal pentru gătit și prăjit. Un ingredient esențial în orice bucătărie."
+                description: "Ulei rafinat de floarea soarelui, ideal pentru gătit și prăjit. Un ingredient esențial în orice bucătărie.",
+                location: "IASI"
             },
             {
                 id: 16,
@@ -332,8 +344,18 @@
                 category: "Ulei și Oțet",
                 store: "Profy",
                 image: "https://placehold.co/150x150/800000/FFFFFF?text=Otet+Vin",
-                description: "Oțet de vin roșu, cu o aromă bogată și aciditate echilibrată. Perfect pentru salate și marinade."
+                description: "Oțet de vin roșu, cu o aromă bogată și aciditate echilibrată. Perfect pentru salate și marinade.",
+                location: "CONSTANTA"
             },
+            {
+                id: 17,
+                name: "Ciocolata ROM",
+                category: "Dulciuri",
+                store: "ORICE MAGAZIN",
+                image: "https://www.delumani.de/cdn/shop/files/kandia-dulce-dulciuri-si-snacks-default-title-rom-baton-de-ciocolata-29423435776118.jpg?v=1727463628",
+                description: "Producția are loc la fabrica Kandia Dulce din București, pe Șoseaua Viilor nr.20, Sector 5. Kandia Dulce este cel mai mare producător român de dulciuri, deținând brandul ROM încă de la lansarea acestuia în 1964, iar batoanele și toate sortimentele ROM continuă să fie fabricate local pe linia de producție dedicată din București.",
+                location: "BUCURESTI"
+            }
         ];
 
         let selectedCategory = 'Toate';
@@ -415,6 +437,15 @@
             document.getElementById('modal-product-image').alt = product.name;
             document.getElementById('modal-product-name').textContent = product.name;
             document.getElementById('modal-product-store').textContent = `Magazin: ${product.store}`;
+            
+            const modalProductLocation = document.getElementById('modal-product-location');
+            if (product.location) {
+                modalProductLocation.innerHTML = `<b>LOCATIE:</b> ${product.location}`;
+                modalProductLocation.classList.remove('hidden');
+            } else {
+                modalProductLocation.classList.add('hidden');
+            }
+
             document.getElementById('modal-product-description').textContent = product.description;
             modal.classList.remove('hidden');
         }
