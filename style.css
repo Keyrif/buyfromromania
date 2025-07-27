@@ -231,12 +231,12 @@ body.dark-mode #clear-desktop-search-btn {
 }
 
 .remove-from-wishlist-btn {
-    width: 32px; 
-    height: 32px; 
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0; 
+    padding: 0;
 }
 
 
@@ -267,9 +267,9 @@ body.dark-mode #clear-desktop-search-btn {
     display: none;
     position: fixed;
     min-width: 180px;
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.7); 
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 0.5rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 100;
@@ -278,7 +278,7 @@ body.dark-mode #clear-desktop-search-btn {
     pointer-events: none;
 }
 body.dark-mode #custom-context-menu {
-    background-color: rgba(45, 55, 72, 0.9);
+    background-color: rgba(45, 55, 72, 0.7); 
 }
 #custom-context-menu.show {
     display: block;
