@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUY FROM ROMANIA</title>
+    <title>BUY FROM ROMANIA - Produse Romanesti</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -79,21 +79,25 @@
             color: #e2e8f0;
         }
         body.dark-mode #product-modal .bg-white,
-        body.dark-mode #wishlist-modal .bg-white {
+        body.dark-mode #wishlist-modal .bg-white,
+        body.dark-mode #recipe-modal .bg-white {
             background-color: #2d3748;
         }
         body.dark-mode #product-modal h2,
         body.dark-mode #product-modal p.text-gray-700,
         body.dark-mode #wishlist-modal h2,
         body.dark-mode #wishlist-modal h4,
-        body.dark-mode #wishlist-modal p.text-gray-600 {
+        body.dark-mode #wishlist-modal p.text-gray-600,
+        body.dark-mode #recipe-modal h2,
+        body.dark-mode #recipe-modal p {
             color: #e2e8f0;
         }
         body.dark-mode #product-modal p.text-blue-600 {
             color: #93c5fd;
         }
         body.dark-mode #close-modal-btn,
-        body.dark-mode #close-wishlist-modal-btn {
+        body.dark-mode #close-wishlist-modal-btn,
+        body.dark-mode #close-recipe-modal-btn {
             color: #cbd5e0;
         }
         body.dark-mode #theme-toggle,
@@ -117,6 +121,11 @@
         body.dark-mode #wishlist-count-badge {
             background-color: #ef4444;
             color: #ffffff;
+        }
+        body.dark-mode #generate-recipe-btn,
+        body.dark-mode #generate-wishlist-recipe-btn {
+            background-color: #4a5568;
+            color: #e2e8f0;
         }
 
 
@@ -201,6 +210,21 @@
         .wishlist-item-removing {
             animation: fadeOutShrink 0.3s ease-out forwards;
         }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50 flex flex-col">
@@ -256,6 +280,9 @@
         <div class="container mx-auto text-center">
             <p>&copy; <span id="current-year"></span> KEYRIF. Toate drepturile rezervate.</p>
             <p class="text-sm text-gray-400 mt-2">
+                <a href="https://github.com/Keyrif" target="_blank" rel="noopener noreferrer" class="text-blue-300 hover:text-blue-100 transition-colors duration-200">Pagina Github KEYRIF</a>
+            </p>
+            <p class="text-sm text-gray-400 mt-2">
                 Creat cu pasiune pentru produsele românești.
             </p>
         </div>
@@ -284,6 +311,9 @@
                     <button id="modal-add-to-wishlist-btn" class="mt-4 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200">
                         Adaugă la Wishlist
                     </button>
+                    <button id="generate-recipe-btn" class="mt-4 ml-2 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 bg-green-500 hover:bg-green-600 hidden">
+                        Sugerează Rețetă
+                    </button>
                 </div>
             </div>
         </div>
@@ -302,9 +332,28 @@
             <div id="wishlist-items-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
             </div>
             <p id="empty-wishlist-message" class="text-center text-gray-600 mt-4 hidden">Wishlist-ul este gol.</p>
+            <button id="generate-wishlist-recipe-btn" class="mt-4 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200 bg-purple-500 hover:bg-purple-600 w-full">
+                Sugerează Rețetă cu Wishlist
+            </button>
             <p class="text-center text-sm text-gray-500 italic mt-4 dark:text-gray-400">
                 * Lista este salvată doar în browserul tău și nu este disponibilă pe termen lung sau pe alte dispozitive.
             </p>
+        </div>
+    </div>
+
+    <div id="recipe-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden animate-fade-in">
+        <div class="bg-white rounded-xl shadow-2xl p-6 relative max-w-2xl w-full transform animate-scale-in">
+            <button id="close-recipe-modal-btn"
+                    class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold
+                           transition-transform duration-200 hover:rotate-90 focus:outline-none"
+                    aria-label="Închide Rețetă">
+                &times;
+            </button>
+            <h2 class="text-3xl font-bold text-gray-800 mb-4 text-center">Rețetă Sugerată</h2>
+            <div id="recipe-content" class="text-gray-700 leading-relaxed max-h-96 overflow-y-auto">
+                <div class="loader hidden"></div>
+                <p id="recipe-text"></p>
+            </div>
         </div>
     </div>
 
@@ -336,6 +385,7 @@
                 category: "Paine",
                 store: "Lidl",
                 image: "https://placehold.co/150x150/F0E68C/000000?text=Paine+Alba",
+                description: "Pâine albă feliată, proaspătă și pufoasă, ideală pentru sandvișuri sau toast.",
                 location: "BUCURESTI"
             },
             {
@@ -480,6 +530,7 @@
 
         let wishlist = [];
         const WISHLIST_STORAGE_KEY = 'buy_from_romania_wishlist';
+        const FOOD_CATEGORIES = ["Paine", "Lactate", "Carne", "Dulciuri", "Făină și Zahăr", "Ulei și Oțet"];
 
         function loadWishlist() {
             const storedWishlist = localStorage.getItem(WISHLIST_STORAGE_KEY);
@@ -510,6 +561,7 @@
                 if (parseInt(currentModalProductId) === productId) {
                     updateModalWishlistButton(productId);
                 }
+                renderProducts();
             }
         }
 
@@ -531,6 +583,7 @@
                     if (wishlist.length === 0) {
                         document.getElementById('empty-wishlist-message').classList.remove('hidden');
                     }
+                    renderProducts();
                 }, { once: true });
             } else {
                 wishlist = wishlist.filter(id => id !== productId);
@@ -539,6 +592,7 @@
                 if (modalButton && parseInt(modalButton.getAttribute('data-product-id')) === productId) {
                     updateModalWishlistButton(productId);
                 }
+                renderProducts();
             }
         }
 
@@ -561,6 +615,14 @@
                     ${product.store}
                 </div>
             `;
+
+            if (isProductInWishlist(product.id)) {
+                const wishlistTag = document.createElement('div');
+                wishlistTag.className = `absolute top-10 right-2 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md`;
+                wishlistTag.textContent = 'Wishlist';
+                cardDiv.appendChild(wishlistTag);
+            }
+
             return cardDiv;
         }
 
@@ -661,6 +723,15 @@
 
             updateModalWishlistButton(product.id);
 
+            const generateRecipeBtn = document.getElementById('generate-recipe-btn');
+            if (FOOD_CATEGORIES.includes(product.category)) {
+                generateRecipeBtn.classList.remove('hidden');
+                generateRecipeBtn.onclick = () => generateRecipe(product.name);
+            } else {
+                generateRecipeBtn.classList.add('hidden');
+                generateRecipeBtn.onclick = null;
+            }
+
             modal.classList.remove('hidden');
         }
 
@@ -723,8 +794,110 @@
             });
         }
 
+        async function generateRecipe(productName) {
+            const recipeModal = document.getElementById('recipe-modal');
+            const recipeContent = document.getElementById('recipe-text');
+            const loader = document.querySelector('#recipe-modal .loader');
+
+            recipeContent.textContent = '';
+            loader.classList.remove('hidden');
+            recipeModal.classList.remove('hidden');
+
+            const prompt = `Generează o rețetă simplă și scurtă (maxim 100 de cuvinte) folosind "${productName}" ca ingredient cheie. Rețeta trebuie să fie în limba română și să includă ingrediente și pași. Te rog să nu folosești niciun fel de formatare Markdown (ex: asteriscuri pentru bold, linii pentru liste etc.), ci doar text simplu.`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "AIzaSyDohcQQ5THueA1ZgmReMF5IZnVbB-oMykg";
+
+            try {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    recipeContent.textContent = text;
+                } else {
+                    recipeContent.textContent = "Nu am putut genera o rețetă. Te rog să încerci din nou.";
+                }
+            } catch (error) {
+                console.error("Eroare la apelul Gemini API:", error);
+                recipeContent.textContent = "A apărut o eroare la generarea rețetei. Verifică conexiunea la internet sau încearcă mai târziu.";
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+
+        async function generateWishlistRecipe() {
+            const recipeModal = document.getElementById('recipe-modal');
+            const recipeContent = document.getElementById('recipe-text');
+            const loader = document.querySelector('#recipe-modal .loader');
+
+            recipeContent.textContent = '';
+            loader.classList.remove('hidden');
+            recipeModal.classList.remove('hidden');
+
+            if (wishlist.length === 0) {
+                recipeContent.textContent = "Wishlist-ul tău este gol. Adaugă produse pentru a genera o rețetă!";
+                loader.classList.add('hidden');
+                return;
+            }
+
+            const wishlistProductNames = wishlist.map(id => {
+                const product = productsData.find(p => p.id === id);
+                return product ? product.name : null;
+            }).filter(name => name !== null);
+
+            if (wishlistProductNames.length === 0) {
+                recipeContent.textContent = "Nu s-au găsit produse valide în wishlist pentru a genera o rețetă.";
+                loader.classList.add('hidden');
+                return;
+            }
+
+            const ingredientsList = wishlistProductNames.join(', ');
+            const prompt = `Generează o rețetă simplă și scurtă (maxim 100 de cuvinte) care combină următoarele ingrediente din wishlist-ul meu: ${ingredientsList}. Rețeta trebuie să fie în limba română și să includă ingrediente și pași. Te rog să nu folosești niciun fel de formatare Markdown (ex: asteriscuri pentru bold, linii pentru liste etc.), ci doar text simplu.`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+
+            try {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    recipeContent.textContent = text;
+                } else {
+                    recipeContent.textContent = "Nu am putut genera o rețetă cu aceste produse. Te rog să încerci din nou sau să adaugi mai multe ingrediente relevante.";
+                }
+            } catch (error) {
+                console.error("Eroare la apelul Gemini API pentru wishlist:", error);
+                recipeContent.textContent = "A apărut o eroare la generarea rețetei. Verifică conexiunea la internet sau încearcă mai târziu.";
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
 
         document.getElementById('close-modal-btn').addEventListener('click', hideProductModal);
+        document.getElementById('close-recipe-modal-btn').addEventListener('click', () => {
+            document.getElementById('recipe-modal').classList.add('hidden');
+        });
 
         const themeToggleBtn = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
@@ -867,6 +1040,8 @@
             document.getElementById('close-wishlist-modal-btn').addEventListener('click', () => {
                 document.getElementById('wishlist-modal').classList.add('hidden');
             });
+
+            document.getElementById('generate-wishlist-recipe-btn').addEventListener('click', generateWishlistRecipe);
         });
 
         window.addEventListener('resize', () => {
