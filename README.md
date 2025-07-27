@@ -12,6 +12,6 @@ Un website care te ajuta sa descoperi produse autentice fabricate in Romania!
 
 <h1 align="center"><b>CUSTOM CONTEXT MENU</b></h1>
 
-<div align="center">
+<p align="center">
 ![IMAGINE2](contextmenu.png)
-</div>
+</p>
