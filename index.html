@@ -78,23 +78,47 @@
         body.dark-mode .product-card-container h3 {
             color: #e2e8f0;
         }
-        body.dark-mode #product-modal .bg-white {
+        body.dark-mode #product-modal .bg-white,
+        body.dark-mode #wishlist-modal .bg-white {
             background-color: #2d3748;
         }
         body.dark-mode #product-modal h2,
-        body.dark-mode #product-modal p.text-gray-700 {
+        body.dark-mode #product-modal p.text-gray-700,
+        body.dark-mode #wishlist-modal h2,
+        body.dark-mode #wishlist-modal h4,
+        body.dark-mode #wishlist-modal p.text-gray-600 {
             color: #e2e8f0;
         }
         body.dark-mode #product-modal p.text-blue-600 {
             color: #93c5fd;
         }
-        body.dark-mode #close-modal-btn {
+        body.dark-mode #close-modal-btn,
+        body.dark-mode #close-wishlist-modal-btn {
             color: #cbd5e0;
         }
-        body.dark-mode #theme-toggle {
+        body.dark-mode #theme-toggle,
+        body.dark-mode #view-wishlist-btn {
             background-color: #4a5568;
             color: #e2e8f0;
         }
+        body.dark-mode .add-to-wishlist-btn {
+            background-color: #a0aec0; 
+            color: #1a202c;
+        }
+        body.dark-mode .add-to-wishlist-btn.bg-pink-500 {
+            background-color: #d53f8c; 
+        }
+        body.dark-mode .remove-from-wishlist-btn {
+            background-color: #e53e3e; 
+        }
+        body.dark-mode .wishlist-item-card {
+            background-color: #4a5568;
+        }
+        body.dark-mode #wishlist-count-badge {
+            background-color: #ef4444; 
+            color: #ffffff;
+        }
+
 
         #category-nav {
             background-color: rgba(255, 255, 255, 0.7);
@@ -121,6 +145,57 @@
                 display: flex !important;
             }
         }
+
+
+        @keyframes buttonClickScale {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); } 
+            100% { transform: scale(1); }
+        }
+
+        @keyframes iconRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); } 
+        }
+
+        .button-active-animation {
+            animation: buttonClickScale 0.4s ease-out;
+        }
+
+        .icon-active-rotation {
+            animation: iconRotate 0.4s ease-out;
+        }
+
+
+        #wishlist-count-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444; 
+            color: white;
+            border-radius: 9999px; 
+            padding: 2px 7px;
+            font-size: 0.75rem; 
+            font-weight: bold;
+            line-height: 1;
+            min-width: 20px; 
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9); 
+            transform-origin: center;
+            transition: transform 0.2s ease-out;
+        }
+        #view-wishlist-btn:hover #wishlist-count-badge {
+            transform: scale(1); 
+        }
+
+        
+        #view-wishlist-btn {
+            position: fixed;
+            bottom: 1rem; 
+            right: 90px; 
+            z-index: 50;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50 flex flex-col">
@@ -136,7 +211,12 @@
         </div>
         <button id="theme-toggle" class="fixed bottom-4 right-4 bg-gray-200 text-gray-800 p-3 rounded-full shadow-lg
                                          transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none z-50">
-            ☀️
+            <span id="theme-icon">☀️</span>
+        </button>
+        <button id="view-wishlist-btn" class="bg-blue-500 text-white p-3 rounded-full shadow-lg
+                                         transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none relative">
+            ❤️ Wishlist
+            <span id="wishlist-count-badge" class="hidden">0</span>
         </button>
     </header>
 
@@ -169,7 +249,7 @@
 
     <footer class="bg-gray-800 text-white p-6 mt-8 rounded-t-2xl shadow-inner">
         <div class="container mx-auto text-center">
-            <p>&copy; <span id="current-year"></span> BUY FROM ROMANIA. Toate drepturile rezervate.</p>
+            <p>&copy; <span id="current-year"></span> KEYRIF. Toate drepturile rezervate.</p>
             <p class="text-sm text-gray-400 mt-2">
                 Creat cu pasiune pentru produsele românești.
             </p>
@@ -196,10 +276,37 @@
                     <p id="modal-product-store" class="text-blue-600 text-lg font-medium mb-3"></p>
                     <p id="modal-product-location" class="text-gray-700 text-lg mb-3"></p>
                     <p id="modal-product-description" class="text-gray-700 leading-relaxed"></p>
+
+                    <button id="modal-add-to-wishlist-btn" class="mt-4 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200">
+                        Adaugă la Wishlist
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <div id="wishlist-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden animate-fade-in">
+        <div class="bg-white rounded-xl shadow-2xl p-6 relative max-w-2xl w-full transform animate-scale-in">
+            <button id="close-wishlist-modal-btn"
+                    class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold
+                           transition-transform duration-200 hover:rotate-90 focus:outline-none"
+                    aria-label="Închide Wishlist">
+                &times;
+            </button>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2 text-center">Wishlist-ul Meu</h2>
+            <p id="wishlist-product-count" class="text-center text-gray-600 mb-6">Număr produse: 0</p>
+            <div id="wishlist-items-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+            </div>
+            <p id="empty-wishlist-message" class="text-center text-gray-600 mt-4 hidden">Wishlist-ul este gol.</p>
+
+            <p class="text-center text-sm text-gray-500 italic mt-4 dark:text-gray-400">
+                * Lista este salvată doar în browserul tău și nu este disponibilă pe termen lung sau pe alte dispozitive.
+            </p>
+        </div>
+    </div>
+
+    <canvas id="sparkCanvas" class="fixed inset-0 pointer-events-none z-40"></canvas>
 
     <script>
         const productsData = [
@@ -227,7 +334,6 @@
                 category: "Paine",
                 store: "Lidl",
                 image: "https://placehold.co/150x150/F0E68C/000000?text=Paine+Alba",
-                description: "Pâine albă moale și pufoasă, feliată pentru comoditate. Ideală pentru sandvișuri sau ca bază pentru bruschete.",
                 location: "BUCURESTI"
             },
             {
@@ -277,21 +383,21 @@
             },
             {
                 id: 9,
-                name: "Carne de Porc",
+                name: "Salam de Sibiu",
                 category: "Carne",
-                store: "Comtim",
-                image: "https://www.comtim.ro/images/PP_cotlet.png",
-                description: "Aceste produse provin integral din fermele proprii Comtim din România și nu se găsesc în alte magazine sau lanțuri naționale. Magazinul oferă o gamă variată: carne proaspătă, produse marinate, toate garantând trasabilitate și prospețime, dedicate exclusiv clienților acestui punct de vânzare.",
-                location: "TIMISOARA"
+                store: "ORICE MAGAZIN",
+                image: "https://placehold.co/150x150/8B4513/FFFFFF?text=Salam+Sibiu",
+                description: "Salam tradițional românesc, afumat și maturat, cu o aromă distinctă și o textură fină. O delicatesă apreciată în toată țara.",
+                location: "SIBIU"
             },
             {
                 id: 10,
-                name: "Carnati de porc",
+                name: "Cârnați de Pleșcoi",
                 category: "Carne",
                 store: "ORICE MAGAZIN",
-                image: "https://auchan.vtexassets.com/arquivos/ids/267561-1200-1200?v=638512729676470000&width=1200&height=1200&aspect=true",
-                description: "Aceste produse provin integral din fermele proprii Comtim din România și nu se găsesc în alte magazine sau lanțuri naționale. Magazinul oferă o gamă variată: carne proaspătă, produse marinate, toate garantând trasabilitate și prospețime, dedicate exclusiv clienților acestui punct de vânzare.",
-                location: "TIMISOARA"
+                image: "https://placehold.co/150x150/A0522D/FFFFFF?text=Carnati+Plescoi",
+                description: "Cârnați picanți, specifici zonei Buzăului, preparați după o rețetă autentică. Ideali pentru grătar sau fierți, alături de o mămăliguță.",
+                location: "BUZAU"
             },
             {
                 id: 11,
@@ -355,17 +461,75 @@
                 image: "https://www.delumani.de/cdn/shop/files/kandia-dulce-dulciuri-si-snacks-default-title-rom-baton-de-ciocolata-29423435776118.jpg?v=1727463628",
                 description: "Producția are loc la fabrica Kandia Dulce din București, pe Șoseaua Viilor nr.20, Sector 5. Kandia Dulce este cel mai mare producător român de dulciuri, deținând brandul ROM încă de la lansarea acestuia în 1964, iar batoanele și toate sortimentele ROM continuă să fie fabricate local pe linia de producție dedicată din București.",
                 location: "BUCURESTI"
+            },
+            {
+                id: 18,
+                name: "Carne de Porc Comtim",
+                category: "Carne",
+                store: "Comtim",
+                image: "https://www.comtim.ro/images/PP_cotlet.png",
+                description: "Aceste produse provin integral din fermele proprii Comtim din România și nu se găsesc în alte magazine sau lanțuri naționale. Magazinul oferă o gamă variată: carne proaspătă, produse marinate, toate garantând trasabilitate și prospețime, dedicate exclusiv clienților acestui punct de vânzare.",
+                location: "TIMISOARA"
             }
         ];
 
         let selectedCategory = 'Toate';
         let isCategoryNavExpanded = false;
 
+
+        let wishlist = []; 
+        const WISHLIST_STORAGE_KEY = 'buy_from_romania_wishlist';
+
+        function loadWishlist() {
+            const storedWishlist = localStorage.getItem(WISHLIST_STORAGE_KEY);
+            if (storedWishlist) {
+                try {
+                    wishlist = JSON.parse(storedWishlist);
+                } catch (e) {
+                    console.error("Failed to parse wishlist from localStorage:", e);
+                    wishlist = []; 
+                }
+            }
+        }
+
+        function saveWishlist() {
+            localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(wishlist));
+            updateWishlistCountBadge(); 
+        }
+
+        function isProductInWishlist(productId) {
+            return wishlist.includes(productId);
+        }
+
+        function addToWishlist(productId) {
+            if (!isProductInWishlist(productId)) {
+                wishlist.push(productId);
+                saveWishlist();
+
+                const currentModalProductId = document.getElementById('modal-add-to-wishlist-btn').getAttribute('data-product-id');
+                if (parseInt(currentModalProductId) === productId) {
+                    updateModalWishlistButton(productId);
+                }
+            }
+        }
+
+        function removeFromWishlist(productId) {
+            wishlist = wishlist.filter(id => id !== productId);
+            saveWishlist();
+
+            const currentModalProductId = document.getElementById('modal-add-to-wishlist-btn').getAttribute('data-product-id');
+            if (parseInt(currentModalProductId) === productId) {
+                updateModalWishlistButton(productId);
+            }
+            renderWishlistItems(); 
+        }
+
         function createProductCard(product) {
             const cardDiv = document.createElement('div');
-            cardDiv.className = `product-card-container relative bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer
+            cardDiv.className = `product-card-container relative bg-white rounded-xl shadow-lg overflow-hidden
                                  transform transition-all duration-300 hover:scale-105 hover:shadow-xl
                                  flex flex-col items-center p-4 group`;
+            
             cardDiv.onclick = () => showProductModal(product);
 
             cardDiv.innerHTML = `
@@ -379,6 +543,7 @@
                     ${product.store}
                 </div>
             `;
+
             return cardDiv;
         }
 
@@ -431,6 +596,37 @@
             });
         }
 
+
+        function updateModalWishlistButton(productId) {
+            const modalWishlistBtn = document.getElementById('modal-add-to-wishlist-btn');
+            const isInWishlist = isProductInWishlist(productId);
+
+  
+            modalWishlistBtn.onclick = null; 
+
+            if (isInWishlist) {
+                modalWishlistBtn.textContent = 'Elimină din Wishlist';
+                modalWishlistBtn.classList.remove('bg-pink-500', 'bg-gray-400', 'cursor-not-allowed');
+                modalWishlistBtn.classList.add('bg-red-500', 'hover:bg-red-600');
+                modalWishlistBtn.disabled = false; 
+                modalWishlistBtn.onclick = () => {
+                    removeFromWishlist(productId);
+                    updateModalWishlistButton(productId); 
+                };
+            } else {
+                modalWishlistBtn.textContent = 'Adaugă la Wishlist';
+                modalWishlistBtn.classList.remove('bg-red-500', 'hover:bg-red-600', 'bg-gray-400', 'cursor-not-allowed');
+                modalWishlistBtn.classList.add('bg-pink-500', 'hover:bg-pink-600');
+                modalWishlistBtn.disabled = false;
+                modalWishlistBtn.onclick = () => {
+                    addToWishlist(productId);
+                    updateModalWishlistButton(productId); 
+                };
+            }
+            modalWishlistBtn.setAttribute('data-product-id', productId);
+        }
+
+
         function showProductModal(product) {
             const modal = document.getElementById('product-modal');
             document.getElementById('modal-product-image').src = product.image;
@@ -447,6 +643,10 @@
             }
 
             document.getElementById('modal-product-description').textContent = product.description;
+
+           
+            updateModalWishlistButton(product.id);
+
             modal.classList.remove('hidden');
         }
 
@@ -455,19 +655,76 @@
             modal.classList.add('hidden');
         }
 
+        
+        function updateWishlistCountBadge() {
+            const badge = document.getElementById('wishlist-count-badge');
+            const productCountText = document.getElementById('wishlist-product-count');
+            const count = wishlist.length;
+
+            if (count > 0) {
+                badge.textContent = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+            productCountText.textContent = `Număr produse: ${count}`;
+        }
+
+       
+        function renderWishlistItems() {
+            const wishlistItemsContainer = document.getElementById('wishlist-items-container');
+            const emptyWishlistMessage = document.getElementById('empty-wishlist-message');
+            wishlistItemsContainer.innerHTML = ''; 
+
+            updateWishlistCountBadge(); 
+            if (wishlist.length === 0) {
+                emptyWishlistMessage.classList.remove('hidden');
+                return;
+            } else {
+                emptyWishlistMessage.classList.add('hidden');
+            }
+
+            wishlist.forEach(productId => {
+                const product = productsData.find(p => p.id === productId);
+                if (product) {
+                    const wishlistItemDiv = document.createElement('div');
+                    wishlistItemDiv.className = `wishlist-item-card bg-gray-100 dark:bg-gray-700 rounded-lg p-4 flex items-center space-x-4 shadow-sm`;
+                    wishlistItemDiv.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" class="w-16 h-16 object-cover rounded-md"
+                             onerror="this.onerror=null;this.src='https://placehold.co/64x64/CCCCCC/666666?text=Produs';"/>
+                        <div class="flex-grow">
+                            <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">${product.name}</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Magazin: ${product.store}</p>
+                        </div>
+                        <button class="remove-from-wishlist-btn bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors duration-200" data-product-id="${product.id}">
+                            &times;
+                        </button>
+                    `;
+                    wishlistItemsContainer.appendChild(wishlistItemDiv);
+
+         
+                    wishlistItemDiv.querySelector('.remove-from-wishlist-btn').addEventListener('click', () => {
+                        removeFromWishlist(product.id);
+                    });
+                }
+            });
+        }
+
+
         document.getElementById('close-modal-btn').addEventListener('click', hideProductModal);
 
         const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon'); 
         const body = document.body;
 
         function setTheme(isDarkMode) {
             if (isDarkMode) {
                 body.classList.add('dark-mode');
-                themeToggleBtn.textContent = '🌙';
+                themeIcon.textContent = '🌙'; 
                 localStorage.setItem('theme', 'dark');
             } else {
                 body.classList.remove('dark-mode');
-                themeToggleBtn.textContent = '☀️';
+                themeIcon.textContent = '☀️'; 
                 localStorage.setItem('theme', 'light');
             }
         }
@@ -486,11 +743,80 @@
             }
         }
 
+        const sparkCanvas = document.getElementById('sparkCanvas');
+        const sparkCtx = sparkCanvas.getContext('2d');
+        let sparks = [];
+
+        function resizeSparkCanvas() {
+            sparkCanvas.width = window.innerWidth;
+            sparkCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeSparkCanvas);
+        resizeSparkCanvas();
+
+        class Spark {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3 + 1;
+                this.life = 30 + Math.random() * 20;
+                this.maxLife = this.life;
+                this.color = `hsl(${Math.random() * 60 + 20}, 100%, 70%)`;
+                this.vx = (Math.random() * 10 - 7);
+                this.vy = (Math.random() * -10 - 5);
+                this.gravity = 0.3;
+                this.friction = 0.95;
+            }
+
+            update() {
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+                this.vy += this.gravity;
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                this.life--;
+            }
+
+            draw() {
+                sparkCtx.save();
+                sparkCtx.beginPath();
+                sparkCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                sparkCtx.fillStyle = this.color;
+                sparkCtx.globalAlpha = this.life / this.maxLife;
+                sparkCtx.fill();
+                sparkCtx.restore();
+            }
+        }
+
+        function animateSparks() {
+            sparkCtx.clearRect(0, 0, sparkCanvas.width, sparkCanvas.height);
+
+            for (let i = sparks.length - 1; i >= 0; i--) {
+                const spark = sparks[i];
+                spark.update();
+                spark.draw();
+
+                if (spark.life <= 0) {
+                    sparks.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animateSparks);
+        }
+
+        animateSparks();
+
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            loadWishlist(); 
             renderCategoryButtons();
             renderProducts();
+            updateWishlistCountBadge(); 
 
+            
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 setTheme(true);
@@ -501,9 +827,37 @@
             themeToggleBtn.addEventListener('click', () => {
                 const isDarkMode = body.classList.contains('dark-mode');
                 setTheme(!isDarkMode);
+
+              
+                themeToggleBtn.classList.add('button-active-animation');
+                themeIcon.classList.add('icon-active-rotation');
+
+                
+                setTimeout(() => {
+                    themeToggleBtn.classList.remove('button-active-animation');
+                    themeIcon.classList.remove('icon-active-rotation');
+                }, 400); 
+
+                const rect = themeToggleBtn.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                for (let i = 0; i < 20; i++) {
+                    sparks.push(new Spark(centerX, centerY));
+                }
             });
 
             document.getElementById('category-toggle-btn').addEventListener('click', toggleCategoryNav);
+
+
+            document.getElementById('view-wishlist-btn').addEventListener('click', () => {
+                renderWishlistItems();
+                document.getElementById('wishlist-modal').classList.remove('hidden');
+            });
+
+            document.getElementById('close-wishlist-modal-btn').addEventListener('click', () => {
+                document.getElementById('wishlist-modal').classList.add('hidden');
+            });
         });
 
         window.addEventListener('resize', () => {
