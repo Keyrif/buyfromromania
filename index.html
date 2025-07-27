@@ -102,20 +102,20 @@
             color: #e2e8f0;
         }
         body.dark-mode .add-to-wishlist-btn {
-            background-color: #a0aec0; 
+            background-color: #a0aec0;
             color: #1a202c;
         }
         body.dark-mode .add-to-wishlist-btn.bg-pink-500 {
-            background-color: #d53f8c; 
+            background-color: #d53f8c;
         }
         body.dark-mode .remove-from-wishlist-btn {
-            background-color: #e53e3e; 
+            background-color: #e53e3e;
         }
         body.dark-mode .wishlist-item-card {
             background-color: #4a5568;
         }
         body.dark-mode #wishlist-count-badge {
-            background-color: #ef4444; 
+            background-color: #ef4444;
             color: #ffffff;
         }
 
@@ -146,16 +146,15 @@
             }
         }
 
-
         @keyframes buttonClickScale {
             0% { transform: scale(1); }
-            50% { transform: scale(1.15); } 
+            50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
 
         @keyframes iconRotate {
             0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); } 
+            100% { transform: rotate(360deg); }
         }
 
         .button-active-animation {
@@ -166,35 +165,41 @@
             animation: iconRotate 0.4s ease-out;
         }
 
-
         #wishlist-count-badge {
             position: absolute;
             top: -5px;
             right: -5px;
-            background-color: #ef4444; 
+            background-color: #ef4444;
             color: white;
-            border-radius: 9999px; 
+            border-radius: 9999px;
             padding: 2px 7px;
-            font-size: 0.75rem; 
+            font-size: 0.75rem;
             font-weight: bold;
             line-height: 1;
-            min-width: 20px; 
+            min-width: 20px;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            transform: scale(0.9); 
+            transform: scale(0.9);
             transform-origin: center;
             transition: transform 0.2s ease-out;
         }
         #view-wishlist-btn:hover #wishlist-count-badge {
-            transform: scale(1); 
+            transform: scale(1);
         }
 
-        
         #view-wishlist-btn {
             position: fixed;
-            bottom: 1rem; 
-            right: 90px; 
+            bottom: 1rem;
+            right: 90px;
             z-index: 50;
+        }
+
+        @keyframes fadeOutShrink {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+        .wishlist-item-removing {
+            animation: fadeOutShrink 0.3s ease-out forwards;
         }
     </style>
 </head>
@@ -276,7 +281,6 @@
                     <p id="modal-product-store" class="text-blue-600 text-lg font-medium mb-3"></p>
                     <p id="modal-product-location" class="text-gray-700 text-lg mb-3"></p>
                     <p id="modal-product-description" class="text-gray-700 leading-relaxed"></p>
-
                     <button id="modal-add-to-wishlist-btn" class="mt-4 px-4 py-2 rounded-full font-bold text-white shadow-md transition-all duration-200">
                         Adaugă la Wishlist
                     </button>
@@ -284,7 +288,6 @@
             </div>
         </div>
     </div>
-
 
     <div id="wishlist-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden animate-fade-in">
         <div class="bg-white rounded-xl shadow-2xl p-6 relative max-w-2xl w-full transform animate-scale-in">
@@ -299,7 +302,6 @@
             <div id="wishlist-items-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
             </div>
             <p id="empty-wishlist-message" class="text-center text-gray-600 mt-4 hidden">Wishlist-ul este gol.</p>
-
             <p class="text-center text-sm text-gray-500 italic mt-4 dark:text-gray-400">
                 * Lista este salvată doar în browserul tău și nu este disponibilă pe termen lung sau pe alte dispozitive.
             </p>
@@ -476,8 +478,7 @@
         let selectedCategory = 'Toate';
         let isCategoryNavExpanded = false;
 
-
-        let wishlist = []; 
+        let wishlist = [];
         const WISHLIST_STORAGE_KEY = 'buy_from_romania_wishlist';
 
         function loadWishlist() {
@@ -487,14 +488,14 @@
                     wishlist = JSON.parse(storedWishlist);
                 } catch (e) {
                     console.error("Failed to parse wishlist from localStorage:", e);
-                    wishlist = []; 
+                    wishlist = [];
                 }
             }
         }
 
         function saveWishlist() {
             localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(wishlist));
-            updateWishlistCountBadge(); 
+            updateWishlistCountBadge();
         }
 
         function isProductInWishlist(productId) {
@@ -505,7 +506,6 @@
             if (!isProductInWishlist(productId)) {
                 wishlist.push(productId);
                 saveWishlist();
-
                 const currentModalProductId = document.getElementById('modal-add-to-wishlist-btn').getAttribute('data-product-id');
                 if (parseInt(currentModalProductId) === productId) {
                     updateModalWishlistButton(productId);
@@ -514,14 +514,32 @@
         }
 
         function removeFromWishlist(productId) {
-            wishlist = wishlist.filter(id => id !== productId);
-            saveWishlist();
+            const itemToRemoveElement = document.querySelector(`#wishlist-items-container .wishlist-item-card button[data-product-id="${productId}"]`);
+            
+            if (itemToRemoveElement && itemToRemoveElement.closest('.wishlist-item-card')) {
+                const parentCard = itemToRemoveElement.closest('.wishlist-item-card');
+                parentCard.classList.add('wishlist-item-removing');
 
-            const currentModalProductId = document.getElementById('modal-add-to-wishlist-btn').getAttribute('data-product-id');
-            if (parseInt(currentModalProductId) === productId) {
-                updateModalWishlistButton(productId);
+                parentCard.addEventListener('animationend', () => {
+                    parentCard.remove();
+                    wishlist = wishlist.filter(id => id !== productId);
+                    saveWishlist();
+                    const modalButton = document.getElementById('modal-add-to-wishlist-btn');
+                    if (modalButton && parseInt(modalButton.getAttribute('data-product-id')) === productId) {
+                        updateModalWishlistButton(productId);
+                    }
+                    if (wishlist.length === 0) {
+                        document.getElementById('empty-wishlist-message').classList.remove('hidden');
+                    }
+                }, { once: true });
+            } else {
+                wishlist = wishlist.filter(id => id !== productId);
+                saveWishlist();
+                const modalButton = document.getElementById('modal-add-to-wishlist-btn');
+                if (modalButton && parseInt(modalButton.getAttribute('data-product-id')) === productId) {
+                    updateModalWishlistButton(productId);
+                }
             }
-            renderWishlistItems(); 
         }
 
         function createProductCard(product) {
@@ -543,7 +561,6 @@
                     ${product.store}
                 </div>
             `;
-
             return cardDiv;
         }
 
@@ -596,22 +613,20 @@
             });
         }
 
-
         function updateModalWishlistButton(productId) {
             const modalWishlistBtn = document.getElementById('modal-add-to-wishlist-btn');
             const isInWishlist = isProductInWishlist(productId);
 
-  
             modalWishlistBtn.onclick = null; 
 
             if (isInWishlist) {
                 modalWishlistBtn.textContent = 'Elimină din Wishlist';
                 modalWishlistBtn.classList.remove('bg-pink-500', 'bg-gray-400', 'cursor-not-allowed');
                 modalWishlistBtn.classList.add('bg-red-500', 'hover:bg-red-600');
-                modalWishlistBtn.disabled = false; 
+                modalWishlistBtn.disabled = false;
                 modalWishlistBtn.onclick = () => {
                     removeFromWishlist(productId);
-                    updateModalWishlistButton(productId); 
+                    updateModalWishlistButton(productId);
                 };
             } else {
                 modalWishlistBtn.textContent = 'Adaugă la Wishlist';
@@ -620,7 +635,7 @@
                 modalWishlistBtn.disabled = false;
                 modalWishlistBtn.onclick = () => {
                     addToWishlist(productId);
-                    updateModalWishlistButton(productId); 
+                    updateModalWishlistButton(productId);
                 };
             }
             modalWishlistBtn.setAttribute('data-product-id', productId);
@@ -644,7 +659,6 @@
 
             document.getElementById('modal-product-description').textContent = product.description;
 
-           
             updateModalWishlistButton(product.id);
 
             modal.classList.remove('hidden');
@@ -655,7 +669,6 @@
             modal.classList.add('hidden');
         }
 
-        
         function updateWishlistCountBadge() {
             const badge = document.getElementById('wishlist-count-badge');
             const productCountText = document.getElementById('wishlist-product-count');
@@ -670,13 +683,13 @@
             productCountText.textContent = `Număr produse: ${count}`;
         }
 
-       
         function renderWishlistItems() {
             const wishlistItemsContainer = document.getElementById('wishlist-items-container');
             const emptyWishlistMessage = document.getElementById('empty-wishlist-message');
-            wishlistItemsContainer.innerHTML = ''; 
+            wishlistItemsContainer.innerHTML = '';
 
-            updateWishlistCountBadge(); 
+            updateWishlistCountBadge();
+
             if (wishlist.length === 0) {
                 emptyWishlistMessage.classList.remove('hidden');
                 return;
@@ -702,9 +715,9 @@
                     `;
                     wishlistItemsContainer.appendChild(wishlistItemDiv);
 
-         
-                    wishlistItemDiv.querySelector('.remove-from-wishlist-btn').addEventListener('click', () => {
-                        removeFromWishlist(product.id);
+                    wishlistItemDiv.querySelector('.remove-from-wishlist-btn').addEventListener('click', (event) => {
+                        const productIdToRemove = parseInt(event.currentTarget.getAttribute('data-product-id'));
+                        removeFromWishlist(productIdToRemove);
                     });
                 }
             });
@@ -714,17 +727,17 @@
         document.getElementById('close-modal-btn').addEventListener('click', hideProductModal);
 
         const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon'); 
+        const themeIcon = document.getElementById('theme-icon');
         const body = document.body;
 
         function setTheme(isDarkMode) {
             if (isDarkMode) {
                 body.classList.add('dark-mode');
-                themeIcon.textContent = '🌙'; 
+                themeIcon.textContent = '🌙';
                 localStorage.setItem('theme', 'dark');
             } else {
                 body.classList.remove('dark-mode');
-                themeIcon.textContent = '☀️'; 
+                themeIcon.textContent = '☀️';
                 localStorage.setItem('theme', 'light');
             }
         }
@@ -811,12 +824,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('current-year').textContent = new Date().getFullYear();
             
-            loadWishlist(); 
+            loadWishlist();
             renderCategoryButtons();
             renderProducts();
-            updateWishlistCountBadge(); 
+            updateWishlistCountBadge();
 
-            
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 setTheme(true);
@@ -828,15 +840,13 @@
                 const isDarkMode = body.classList.contains('dark-mode');
                 setTheme(!isDarkMode);
 
-              
                 themeToggleBtn.classList.add('button-active-animation');
                 themeIcon.classList.add('icon-active-rotation');
 
-                
                 setTimeout(() => {
                     themeToggleBtn.classList.remove('button-active-animation');
                     themeIcon.classList.remove('icon-active-rotation');
-                }, 400); 
+                }, 400);
 
                 const rect = themeToggleBtn.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
@@ -848,7 +858,6 @@
             });
 
             document.getElementById('category-toggle-btn').addEventListener('click', toggleCategoryNav);
-
 
             document.getElementById('view-wishlist-btn').addEventListener('click', () => {
                 renderWishlistItems();
