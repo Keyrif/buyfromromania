@@ -296,6 +296,7 @@ body.dark-mode #custom-context-menu {
 #custom-context-menu button {
     white-space: nowrap;
     color: #374151;
+    cursor: pointer;
 }
 body.dark-mode #custom-context-menu button {
     color: #e2e8f0;
@@ -342,8 +343,14 @@ body.dark-mode #desktop-search-input::placeholder {
 footer {
     background-color: rgba(31, 41, 55, 0.85);
 }
-
 body.black-and-white-mode {
     filter: grayscale(100%);
-    -webkit-filter: grayscale(100%); 
+    -webkit-filter: grayscale(100%);
+}
+
+#products-section-title {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
