@@ -10,7 +10,7 @@
     <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/2560px-Flag_2560px-Flag_of_Romania.svg.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=0.5">
+    <link rel="stylesheet" href="style.css?v=0.6">
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/2560px-Flag_of_Romania.svg.png" type="image/png">
 </head>
 <body class="min-h-screen bg-gray-50 flex flex-col">
@@ -101,8 +101,8 @@
         </div>
     </footer>
 
-    <div id="product-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden animate-fade-in">
-        <div class="bg-white rounded-xl shadow-2xl p-6 relative max-w-lg w-full transform animate-scale-in">
+    <div id="product-modal" class="fixed inset-0 flex items-center justify-center z-50 p-4 hidden animate-fade-in">
+        <div class="rounded-xl shadow-2xl p-6 relative max-w-lg w-full transform animate-scale-in">
             <button id="close-modal-btn"
                     class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold
                            transition-transform duration-200 hover:rotate-90 focus:outline-none"
@@ -132,8 +132,8 @@
         </div>
     </div>
 
-    <div id="wishlist-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden animate-fade-in">
-        <div class="bg-white rounded-xl shadow-2xl p-6 relative max-w-2xl w-full transform animate-scale-in">
+    <div id="wishlist-modal" class="fixed inset-0 flex items-center justify-center z-50 p-4 hidden animate-fade-in">
+        <div class="rounded-xl shadow-2xl p-6 relative max-w-2xl w-full transform animate-scale-in">
             <button id="close-wishlist-modal-btn"
                     class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold
                            transition-transform duration-200 hover:rotate-90 focus:outline-none"
@@ -154,8 +154,8 @@
         </div>
     </div>
 
-    <div id="recipe-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden animate-fade-in">
-        <div class="bg-white rounded-xl shadow-2xl p-6 relative max-w-2xl w-full transform animate-scale-in">
+    <div id="recipe-modal" class="fixed inset-0 flex items-center justify-center z-50 p-4 hidden animate-fade-in">
+        <div class="rounded-xl shadow-2xl p-6 relative max-w-2xl w-full transform animate-scale-in">
             <button id="close-recipe-modal-btn"
                     class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold
                            transition-transform duration-200 hover:rotate-90 focus:outline-none"
@@ -189,6 +189,14 @@
         <button id="context-toggle-black-and-white" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-blue-100 rounded-md">
             Activează Alb/Negru
         </button>
+    </div>
+
+    <div id="notification-message" class="notification-message flex items-center justify-between">
+        <span id="notification-text"></span>
+        <button id="notification-undo-btn" class="ml-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 hidden">
+            ANULEAZĂ
+        </button>
+        <div id="notification-progress-bar" class="notification-progress-bar"></div>
     </div>
 
     <script src="script.js"></script>

@@ -72,11 +72,6 @@ body.dark-mode .product-card-container {
 body.dark-mode .product-card-container h3 {
     color: #e2e8f0;
 }
-body.dark-mode #product-modal .bg-white,
-body.dark-mode #wishlist-modal .bg-white,
-body.dark-mode #recipe-modal .bg-white {
-    background-color: rgba(45, 55, 72, 0.9);
-}
 body.dark-mode #product-modal h2,
 body.dark-mode #product-modal p.text-gray-700,
 body.dark-mode #wishlist-modal h2,
@@ -230,12 +225,20 @@ body.dark-mode #clear-desktop-search-btn {
     background-color: rgba(59, 130, 246, 0.7);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 #theme-toggle {
     background-color: rgba(59, 130, 246, 0.7);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .remove-from-wishlist-btn {
@@ -353,4 +356,108 @@ body.black-and-white-mode {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+}
+
+.product-card-container h3 {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+img {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
+}
+
+.product-card-container .absolute.top-2.right-2 {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+
+#product-modal,
+#wishlist-modal,
+#recipe-modal {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+#product-modal > div,
+#wishlist-modal > div,
+#recipe-modal > div {
+    background-color: rgba(255, 255, 255, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    position: relative;
+    max-width: 32rem;
+    width: 100%;
+    transform: scale(1);
+    animation: scaleIn 0.3s ease-out forwards;
+}
+
+#wishlist-modal > div,
+#recipe-modal > div {
+    max-width: 42rem;
+}
+
+
+body.dark-mode #product-modal > div,
+body.dark-mode #wishlist-modal > div,
+body.dark-mode #recipe-modal > div {
+    background-color: rgba(45, 55, 72, 0.95);
+}
+
+#notification-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: #333;
+    font-weight: 600;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+body.dark-mode #notification-message {
+    background-color: rgba(45, 55, 72, 0.7); 
+    color: #e2e8f0;
+}
+
+#notification-message.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+#notification-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background-color: #2563eb; 
+    width: 100%;
+    animation: none;
+}
+
+@keyframes progressBarFill {
+    from { width: 100%; }
+    to { width: 0%; }
 }

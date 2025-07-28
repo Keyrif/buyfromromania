@@ -138,7 +138,7 @@ const productsData = [
         id: 16,
         name: "Cârnați de Porc Comtim",
         category: "Carne",
-        store: "Comtim",
+        store: "COMTIM",
         image: "https://www.comtim.ro/images/PP_tara.png",
         description: "Aceste produse provin integral din fermele proprii Comtim din România și nu se găsesc în alte magazine sau lanțuri naționale. Magazinul oferă o gamă variată: carne proaspătă, produse marinate, toate garantând trasabilitate și prospețime, dedicate exclusiv clienților acestui punct de vânzare.",
         location: "TIMISOARA"
@@ -156,12 +156,13 @@ const productsData = [
         id: 18,
         name: "Carne de Porc Comtim",
         category: "Carne",
-        store: "Comtim",
+        store: "COMTIM",
         image: "https://www.comtim.ro/images/PP_cotlet.png",
         description: "Aceste produse provin integral din fermele proprii Comtim din România și nu se găsesc în alte magazine sau lanțuri naționale. Magazinul oferă o gamă variată: carne proaspătă, produse marinate, toate garantând trasabilitate și prospețime, dedicate exclusiv clienților acestui punct de vânzare.",
         location: "TIMISOARA"
     }
 ];
+
 let selectedCategory = 'Toate';
 let isCategoryNavExpanded = false;
 let searchTerm = '';
@@ -169,16 +170,17 @@ let searchTerm = '';
 let wishlist = [];
 const WISHLIST_STORAGE_KEY = 'buy_from_romania_wishlist';
 const ANIMATIONS_STORAGE_KEY = 'buy_from_romania_animations_enabled';
-const BLACK_AND_WHITE_STORAGE_KEY = 'buy_from_romania_black_and_white_mode'; 
+const BLACK_AND_WHITE_STORAGE_KEY = 'buy_from_romania_black_and_white_mode';
 const FOOD_CATEGORIES = ["Pâine", "Lactate", "Carne", "Dulciuri", "Făină și Zahăr", "Ulei și Oțet", "Băuturi"];
 
 let currentRightClickedProductId = null;
 let animationsEnabled = true; 
-let isBlackAndWhiteMode = false; 
-let animationFrameId = null; 
+let isBlackAndWhiteMode = false;
+let animationFrameId = null;
+let notificationTimeoutId = null; 
+let previousWishlistState = []; 
 
-
-const ROMANIAN_FLAG_COLORS = ['#002B7F', '#FCD116', '#CE1126']; 
+const ROMANIAN_FLAG_COLORS = ['#002B7F', '#FCD116', '#CE1126'];
 
 function loadAnimationsState() {
     const storedState = localStorage.getItem(ANIMATIONS_STORAGE_KEY);
@@ -189,10 +191,8 @@ function loadAnimationsState() {
     }
     const animationsToggleButton = document.getElementById('context-toggle-animations');
     if (animationsToggleButton) {
-
         animationsToggleButton.textContent = animationsEnabled ? 'Dezactivează Animații' : 'Activează Animații';
     }
-
     toggleAnimations(animationsEnabled);
 }
 
@@ -212,16 +212,14 @@ function toggleAnimations(enable) {
         if (animationsToggleButton) {
             animationsToggleButton.textContent = 'Dezactivează Animații';
         }
-
         if (!animationFrameId) {
             animateSparks();
         }
-    } else { 
+    } else {
         body.classList.add('no-animations');
         if (animationsToggleButton) {
             animationsToggleButton.textContent = 'Activează Animații';
         }
-
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
@@ -231,13 +229,12 @@ function toggleAnimations(enable) {
     }
 }
 
-
 function loadBlackAndWhiteState() {
     const storedState = localStorage.getItem(BLACK_AND_WHITE_STORAGE_KEY);
     if (storedState !== null) {
         isBlackAndWhiteMode = JSON.parse(storedState);
     } else {
-        isBlackAndWhiteMode = false; 
+        isBlackAndWhiteMode = false;
     }
     const blackAndWhiteToggleButton = document.getElementById('context-toggle-black-and-white');
     if (blackAndWhiteToggleButton) {
@@ -605,12 +602,98 @@ function renderWishlistItems() {
     });
 }
 
-function clearWishlist() {
+function clearWishlistWithUndo() {
+    if (wishlist.length === 0) {
+        showNotification('Wishlist-ul este deja gol!');
+        if (animationsEnabled) {
+            document.getElementById('clear-wishlist-btn').classList.add('shake-animation');
+            setTimeout(() => {
+                document.getElementById('clear-wishlist-btn').classList.remove('shake-animation');
+            }, 300);
+        }
+        return;
+    }
+
+
+    previousWishlistState = [...wishlist];
+
+
     wishlist = [];
-    saveWishlist();
+    saveWishlist(); 
     renderWishlistItems();
     renderProducts();
+
+
+    showNotification('Wishlist-ul a fost golit! Anulează?', true, undoClearWishlist);
+
+    if (animationsEnabled) {
+        document.getElementById('clear-wishlist-btn').classList.add('button-active-animation');
+        setTimeout(() => {
+            document.getElementById('clear-wishlist-btn').classList.remove('button-active-animation');
+        }, 300);
+    }
 }
+
+
+function undoClearWishlist() {
+    wishlist = [...previousWishlistState]; 
+    saveWishlist(); 
+    renderWishlistItems();
+    renderProducts();
+    showNotification('Golitrea wishlist-ului a fost anulată!');
+}
+
+/**
+ * @param {string} message
+ * @param {boolean} showUndoButton
+ * @param {function} undoCallback
+ */
+function showNotification(message, showUndoButton = false, undoCallback = null) {
+    const notificationMessage = document.getElementById('notification-message');
+    const notificationText = document.getElementById('notification-text');
+    const progressBar = document.getElementById('notification-progress-bar');
+    const undoButton = document.getElementById('notification-undo-btn');
+    const notificationDuration = 5000;
+
+    if (notificationTimeoutId) {
+        clearTimeout(notificationTimeoutId);
+    }
+
+    notificationText.innerHTML = message; 
+
+    if (showUndoButton) {
+        undoButton.classList.remove('hidden');
+        undoButton.onclick = () => {
+            if (undoCallback) {
+                undoCallback();
+            }
+            notificationMessage.classList.remove('show');
+            undoButton.classList.add('hidden');
+            if (notificationTimeoutId) {
+                clearTimeout(notificationTimeoutId);
+            }
+
+            progressBar.style.animation = 'none';
+        };
+    } else {
+        undoButton.classList.add('hidden');
+        undoButton.onclick = null; 
+    }
+
+    notificationMessage.classList.add('show');
+
+
+    progressBar.style.animation = 'none';
+    void progressBar.offsetWidth; 
+    progressBar.style.animation = `progressBarFill ${notificationDuration / 1000}s linear forwards`;
+
+
+    notificationTimeoutId = setTimeout(() => {
+        notificationMessage.classList.remove('show');
+        undoButton.classList.add('hidden'); 
+    }, notificationDuration);
+}
+
 
 async function generateRecipe(productName) {
     const recipeModal = document.getElementById('recipe-modal');
@@ -626,7 +709,7 @@ async function generateRecipe(productName) {
     let chatHistory = [];
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
     const payload = { contents: chatHistory };
-    const apiKey = "AIzaSyDe9JFtcK_xdix412bsD3KwJ5x-nTdmb3Q"; 
+    const apiKey = "";
 
     try {
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -685,7 +768,7 @@ async function generateWishlistRecipe() {
     let chatHistory = [];
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
     const payload = { contents: chatHistory };
-    const apiKey = "AIzaSyDe9JFtcK_xdix412bsD3KwJ5x-nTdmb3Q"; 
+    const apiKey = "";
 
     try {
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -779,14 +862,14 @@ class Spark {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = Math.random() * 3 + 1.5; 
-        this.life = 90 + Math.random() * 80; 
+        this.size = Math.random() * 3 + 1.5;
+        this.life = 90 + Math.random() * 80;
         this.maxLife = this.life;
-        this.color = ROMANIAN_FLAG_COLORS[Math.floor(Math.random() * ROMANIAN_FLAG_COLORS.length)]; 
-        this.vx = (Math.random() - 0.5) * 25; 
-        this.vy = (Math.random() * -18 - 8); 
-        this.gravity = 0.4; 
-        this.friction = 0.96; 
+        this.color = ROMANIAN_FLAG_COLORS[Math.floor(Math.random() * ROMANIAN_FLAG_COLORS.length)];
+        this.vx = (Math.random() - 0.5) * 25;
+        this.vy = (Math.random() * -18 - 8);
+        this.gravity = 0.4;
+        this.friction = 0.96;
     }
 
     update() {
@@ -812,10 +895,9 @@ class Spark {
 }
 
 function animateSparks() {
-
     if (!animationsEnabled) {
         sparkCtx.clearRect(0, 0, sparkCanvas.width, sparkCanvas.height);
-        animationFrameId = null; 
+        animationFrameId = null;
         return;
     }
     sparkCtx.clearRect(0, 0, sparkCanvas.width, sparkCanvas.height);
@@ -838,8 +920,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('current-year').textContent = new Date().getFullYear();
     
     loadWishlist();
-    loadAnimationsState(); 
-    loadBlackAndWhiteState(); 
+    loadAnimationsState();
+    loadBlackAndWhiteState();
     renderCategoryButtons();
     renderProducts();
     updateWishlistCountBadge();
@@ -854,7 +936,6 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggleBtn.addEventListener('click', () => {
         const isDarkMode = body.classList.contains('dark-mode');
         setTheme(!isDarkMode);
-
 
         if (animationsEnabled) {
             themeToggleBtn.classList.add('button-active-animation');
@@ -899,23 +980,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
     clearWishlistBtn.addEventListener('click', () => {
-        if (wishlist.length === 0) {
-            if (animationsEnabled) {
-                clearWishlistBtn.classList.add('shake-animation');
-                setTimeout(() => {
-                    clearWishlistBtn.classList.remove('shake-animation');
-                }, 300);
-            }
-        } else {
-            clearWishlist();
-            if (animationsEnabled) {
-                clearWishlistBtn.classList.add('button-active-animation');
-                setTimeout(() => {
-                    clearWishlistBtn.classList.remove('button-active-animation');
-                }, 300);
-            }
-        }
+        clearWishlistWithUndo();
     });
 
     const customContextMenu = document.getElementById('custom-context-menu');
@@ -924,7 +991,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contextSuggestRecipeBtn = document.getElementById('context-suggest-recipe');
     const contextViewDetailsBtn = document.getElementById('context-view-details');
     const contextToggleAnimationsButton = document.getElementById('context-toggle-animations');
-    const contextToggleBlackAndWhiteButton = document.getElementById('context-toggle-black-and-white'); 
+    const contextToggleBlackAndWhiteButton = document.getElementById('context-toggle-black-and-white');
 
     document.addEventListener('contextmenu', (event) => {
         event.preventDefault();
@@ -935,7 +1002,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contextAddToWishlistBtn.classList.add('hidden');
         contextSuggestRecipeBtn.classList.add('hidden');
         contextViewDetailsBtn.classList.add('hidden');
-        contextToggleAnimationsButton.classList.remove('hidden'); 
+        contextToggleAnimationsButton.classList.remove('hidden');
         contextToggleBlackAndWhiteButton.classList.remove('hidden');
 
         if (productCard) {
@@ -985,38 +1052,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
         contextToggleBlackAndWhiteButton.textContent = isBlackAndWhiteMode ? 'Dezactivează Alb/Negru' : 'Activează Alb/Negru';
 
-        customContextMenu.style.left = `${event.clientX}px`;
-        customContextMenu.style.top = `${event.clientY}px`;
 
+        customContextMenu.style.visibility = 'hidden';
+        customContextMenu.classList.add('show'); 
+        
         const menuWidth = customContextMenu.offsetWidth;
         const menuHeight = customContextMenu.offsetHeight;
-        if (event.clientX + menuWidth > window.innerWidth) {
-            customContextMenu.style.left = `${window.innerWidth - menuWidth - 10}px`;
+
+        let posX = event.clientX;
+        let posY = event.clientY;
+
+
+        posX -= menuWidth / 2;
+        posY -= menuHeight / 2;
+
+
+        if (posX + menuWidth > window.innerWidth) {
+            posX = window.innerWidth - menuWidth - 10;
         }
-        if (event.clientY + menuHeight > window.innerHeight) {
-            customContextMenu.style.top = `${window.innerHeight - menuHeight - 10}px`;
+        if (posY + menuHeight > window.innerHeight) {
+            posY = window.innerHeight - menuHeight - 10;
         }
-        
-        customContextMenu.classList.add('show');
+        if (posX < 0) {
+            posX = 10;
+        }
+        if (posY < 0) {
+            posY = 10;
+        }
+
+        customContextMenu.style.left = `${posX}px`;
+        customContextMenu.style.top = `${posY}px`;
+        customContextMenu.style.visibility = 'visible'; 
     });
 
     document.addEventListener('click', (event) => {
-
         if (customContextMenu.classList.contains('show') && !customContextMenu.contains(event.target)) {
             customContextMenu.classList.remove('show');
+            customContextMenu.style.visibility = 'hidden'; 
         }
     });
 
-
     contextToggleAnimationsButton.addEventListener('click', () => {
-        toggleAnimations(!animationsEnabled); 
-        customContextMenu.classList.remove('show'); 
+        toggleAnimations(!animationsEnabled);
+        customContextMenu.classList.remove('show');
+        customContextMenu.style.visibility = 'hidden';
     });
 
-
     contextToggleBlackAndWhiteButton.addEventListener('click', () => {
-        toggleBlackAndWhiteMode(!isBlackAndWhiteMode); 
-        customContextMenu.classList.remove('show'); 
+        toggleBlackAndWhiteMode(!isBlackAndWhiteMode);
+        customContextMenu.classList.remove('show');
+        customContextMenu.style.visibility = 'hidden';
     });
 
     contextAddToWishlistBtn.addEventListener('click', () => {
@@ -1027,6 +1112,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 addToWishlist(currentRightClickedProductId);
             }
             customContextMenu.classList.remove('show');
+            customContextMenu.style.visibility = 'hidden';
         }
     });
 
@@ -1037,6 +1123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showProductModal(product);
             }
             customContextMenu.classList.remove('show');
+            customContextMenu.style.visibility = 'hidden';
         }
     });
 
