@@ -32,7 +32,7 @@ const productsData = [
         category: "Apă",
         store: "ONLINE",
         image: "https://cumpana.ro/cdn/shop/files/11L_720x.png?v=1726754312",
-        description: "Se poate comanda direct de pe site-ul oficial cumpana.ro. Companie românească, cu capital 100% românesc, oferind apă de izvor pură, cu pH usor alcalin (8.2).",
+        description: "Companie românească, cu capital 100% românesc, oferind apă de izvor pură, cu pH usor alcalin (8.2).",
         location: "ILFOV, Ștefăneștii de Jos"
     },
     {
@@ -162,7 +162,6 @@ const productsData = [
         location: "TIMISOARA"
     }
 ];
-
 let selectedCategory = 'Toate';
 let isCategoryNavExpanded = false;
 let searchTerm = '';
@@ -273,7 +272,6 @@ function loadWishlist() {
         try {
             wishlist = JSON.parse(storedWishlist);
         } catch (e) {
-            console.error("Failed to parse wishlist from localStorage:", e);
             wishlist = [];
         }
     }
@@ -405,9 +403,8 @@ function renderProducts() {
 
         currentProducts = currentProducts.filter(product => {
             const normalizedProductName = normalizeString(product.name);
-            return searchKeywords.every(searchKeyword => {
-                return normalizedProductName.includes(searchKeyword);
-            });
+            return normalizedProductName.includes(processedSearchTerm) ||
+                   searchKeywords.some(keyword => normalizedProductName.includes(keyword));
         });
     }
 
@@ -614,15 +611,12 @@ function clearWishlistWithUndo() {
         return;
     }
 
-
     previousWishlistState = [...wishlist];
-
 
     wishlist = [];
     saveWishlist(); 
     renderWishlistItems();
     renderProducts();
-
 
     showNotification('Wishlist-ul a fost golit! Anulează?', true, undoClearWishlist);
 
@@ -634,7 +628,6 @@ function clearWishlistWithUndo() {
     }
 }
 
-
 function undoClearWishlist() {
     wishlist = [...previousWishlistState]; 
     saveWishlist(); 
@@ -643,17 +636,12 @@ function undoClearWishlist() {
     showNotification('Golitrea wishlist-ului a fost anulată!');
 }
 
-/**
- * @param {string} message
- * @param {boolean} showUndoButton
- * @param {function} undoCallback
- */
 function showNotification(message, showUndoButton = false, undoCallback = null) {
     const notificationMessage = document.getElementById('notification-message');
     const notificationText = document.getElementById('notification-text');
     const progressBar = document.getElementById('notification-progress-bar');
     const undoButton = document.getElementById('notification-undo-btn');
-    const notificationDuration = 5000;
+    const notificationDuration = 5000; 
 
     if (notificationTimeoutId) {
         clearTimeout(notificationTimeoutId);
@@ -672,7 +660,6 @@ function showNotification(message, showUndoButton = false, undoCallback = null) 
             if (notificationTimeoutId) {
                 clearTimeout(notificationTimeoutId);
             }
-
             progressBar.style.animation = 'none';
         };
     } else {
@@ -682,11 +669,9 @@ function showNotification(message, showUndoButton = false, undoCallback = null) 
 
     notificationMessage.classList.add('show');
 
-
     progressBar.style.animation = 'none';
     void progressBar.offsetWidth; 
     progressBar.style.animation = `progressBarFill ${notificationDuration / 1000}s linear forwards`;
-
 
     notificationTimeoutId = setTimeout(() => {
         notificationMessage.classList.remove('show');
@@ -704,7 +689,7 @@ async function generateRecipe(productName) {
     loader.classList.remove('hidden');
     recipeModal.classList.remove('hidden');
 
-    const prompt = `Generează o rețetă simplă și scurtă (maxim 100 de cuvinte) folosind "${productName}" ca ingredient cheie. Rețeta trebuie să fie în limba română și să includă ingrediente și pași. Te rog să nu folosești niciun fel de formatare Markdown (ex: asteriscuri pentru bold, linii pentru liste etc.), ci doar text simplu.`;
+    const prompt = `Genereaza o reteta simpla și scurta (maxim 100 de cuvinte) folosind "${productName}" ca ingredient cheie. Reteta trebuie sa fie în limba romana si sa includa ingrediente si pasi. Te rog sa nu folosesti niciun fel de formatare markdown (ex: asteriscuri pentru bold, linii pentru liste etc.), ci doar text simplu.`;
 
     let chatHistory = [];
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
@@ -729,7 +714,6 @@ async function generateRecipe(productName) {
             recipeContent.textContent = "Nu am putut genera o rețetă. Te rog să încerci din nou.";
         }
     } catch (error) {
-        console.error("Eroare la apelul Gemini API:", error);
         recipeContent.textContent = "A apărut o eroare la generarea rețetei. Verifică conexiunea la internet sau încearcă mai târziu.";
     } finally {
         loader.classList.add('hidden');
@@ -763,7 +747,7 @@ async function generateWishlistRecipe() {
     }
 
     const ingredientsList = wishlistProductNames.join(', ');
-    const prompt = `Generează o rețetă simplă și scurtă (maxim 100 de cuvinte) care combină următoarele ingrediente din wishlist-ul meu: ${ingredientsList}. Rețeta trebuie să fie în limba română și să includă ingrediente și pași. Te rog să nu folosești niciun fel de formatare Markdown (ex: asteriscuri pentru bold, linii pentru liste etc.), ci doar text simplu.`;
+    const prompt = `Genereaza o reteta simpla si scurta (maxim 100 de cuvinte) care combina urmatoarele ingrediente din wishlist-ul meu: ${ingredientsList}. Reteta trebuie sa fie în limba romana si sa includa ingrediente si pasi. Te rog sa nu folosesti niciun fel de formatare markdown (ex: asteriscuri pentru bold, linii pentru liste etc.), cu doar text simplu.`;
 
     let chatHistory = [];
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
@@ -788,7 +772,6 @@ async function generateWishlistRecipe() {
             recipeContent.textContent = "Nu am putut genera o rețetă cu aceste produse. Te rog să încerci din nou sau să adaugi mai multe ingrediente relevante.";
         }
     } catch (error) {
-        console.error("Eroare la apelul Gemini API pentru wishlist:", error);
         recipeContent.textContent = "A apărut o eroare la generarea rețetei. Verifică conexiunea la internet sau încearcă mai târziu.";
     } finally {
         loader.classList.add('hidden');
@@ -980,7 +963,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
     clearWishlistBtn.addEventListener('click', () => {
         clearWishlistWithUndo();
     });
@@ -992,116 +974,110 @@ document.addEventListener('DOMContentLoaded', () => {
     const contextViewDetailsBtn = document.getElementById('context-view-details');
     const contextToggleAnimationsButton = document.getElementById('context-toggle-animations');
     const contextToggleBlackAndWhiteButton = document.getElementById('context-toggle-black-and-white');
+    const contextMenuSeparator = document.getElementById('context-menu-separator');
 
     document.addEventListener('contextmenu', (event) => {
         event.preventDefault();
 
-        const productCard = event.target.closest('.product-card-container');
-
-        contextProductName.classList.add('hidden');
-        contextAddToWishlistBtn.classList.add('hidden');
-        contextSuggestRecipeBtn.classList.add('hidden');
-        contextViewDetailsBtn.classList.add('hidden');
-        contextToggleAnimationsButton.classList.remove('hidden');
-        contextToggleBlackAndWhiteButton.classList.remove('hidden');
-
-        if (productCard) {
-            currentRightClickedProductId = parseInt(productCard.getAttribute('data-product-id'));
-            const product = productsData.find(p => p.id === currentRightClickedProductId);
-
-            if (product) {
-                contextProductName.textContent = product.name;
-                contextProductName.classList.remove('hidden');
-            } else {
-                contextProductName.textContent = '';
-            }
-
-            contextAddToWishlistBtn.classList.remove('hidden');
-            contextViewDetailsBtn.classList.remove('hidden');
-
-            if (isProductInWishlist(currentRightClickedProductId)) {
-                contextAddToWishlistBtn.textContent = 'Elimină din Wishlist';
-                contextAddToWishlistBtn.classList.add('bg-red-500', 'text-white', 'hover:bg-red-600');
-                contextAddToWishlistBtn.classList.remove('text-gray-800', 'hover:bg-blue-100'); 
-                if (body.classList.contains('dark-mode')) {
-                    contextAddToWishlistBtn.classList.remove('dark:text-gray-200', 'dark:hover:bg-gray-600');
-                }
-            } else {
-                contextAddToWishlistBtn.textContent = 'Adaugă la Wishlist';
-                contextAddToWishlistBtn.classList.remove('bg-red-500', 'hover:bg-red-600', 'bg-gray-400', 'cursor-not-allowed');
-                contextAddToWishlistBtn.classList.add('text-gray-800', 'hover:bg-blue-100'); 
-                if (body.classList.contains('dark-mode')) {
-                    contextAddToWishlistBtn.classList.add('dark:text-gray-200', 'dark:hover:bg-gray-600');
-                }
-            }
-
-            if (product && FOOD_CATEGORIES.includes(product.category)) {
-                contextSuggestRecipeBtn.classList.remove('hidden');
-                contextSuggestRecipeBtn.onclick = () => {
-                    generateRecipe(product.name);
-                    customContextMenu.classList.remove('show');
-                };
-            } else {
-                contextSuggestRecipeBtn.classList.add('hidden');
-                contextSuggestRecipeBtn.onclick = null;
-            }
-            
-        } else {
-            currentRightClickedProductId = null;
-        }
-
-        contextToggleBlackAndWhiteButton.textContent = isBlackAndWhiteMode ? 'Dezactivează Alb/Negru' : 'Activează Alb/Negru';
-
-
-        customContextMenu.style.visibility = 'hidden';
-        customContextMenu.classList.add('show'); 
+        customContextMenu.classList.remove('show'); 
         
-        const menuWidth = customContextMenu.offsetWidth;
-        const menuHeight = customContextMenu.offsetHeight;
+        setTimeout(() => {
+            const productCard = event.target.closest('.product-card-container');
 
-        let posX = event.clientX;
-        let posY = event.clientY;
+            contextProductName.classList.add('hidden');
+            contextAddToWishlistBtn.classList.add('hidden');
+            contextSuggestRecipeBtn.classList.add('hidden');
+            contextViewDetailsBtn.classList.add('hidden');
+            contextMenuSeparator.classList.add('hidden');
+            contextToggleAnimationsButton.classList.remove('hidden');
+            contextToggleBlackAndWhiteButton.classList.remove('hidden');
 
+            if (productCard) {
+                currentRightClickedProductId = parseInt(productCard.getAttribute('data-product-id'));
+                const product = productsData.find(p => p.id === currentRightClickedProductId);
 
-        posX -= menuWidth / 2;
-        posY -= menuHeight / 2;
+                if (product) {
+                    contextProductName.textContent = product.name;
+                    contextProductName.classList.remove('hidden');
+                } else {
+                    contextProductName.textContent = '';
+                }
 
+                contextAddToWishlistBtn.classList.remove('hidden');
+                contextViewDetailsBtn.classList.remove('hidden');
+                contextMenuSeparator.classList.remove('hidden');
 
-        if (posX + menuWidth > window.innerWidth) {
-            posX = window.innerWidth - menuWidth - 10;
-        }
-        if (posY + menuHeight > window.innerHeight) {
-            posY = window.innerHeight - menuHeight - 10;
-        }
-        if (posX < 0) {
-            posX = 10;
-        }
-        if (posY < 0) {
-            posY = 10;
-        }
+                if (isProductInWishlist(currentRightClickedProductId)) {
+                    contextAddToWishlistBtn.textContent = 'Elimină din Wishlist';
+                    contextAddToWishlistBtn.classList.add('bg-red-500', 'text-white', 'hover:bg-red-600');
+                    contextAddToWishlistBtn.classList.remove('text-gray-800', 'hover:bg-blue-100'); 
+                    if (body.classList.contains('dark-mode')) {
+                        contextAddToWishlistBtn.classList.remove('dark:text-gray-200', 'dark:hover:bg-gray-600');
+                    }
+                } else {
+                    contextAddToWishlistBtn.textContent = 'Adaugă la Wishlist';
+                    contextAddToWishlistBtn.classList.remove('bg-red-500', 'hover:bg-red-600', 'bg-gray-400', 'cursor-not-allowed');
+                    contextAddToWishlistBtn.classList.add('text-gray-800', 'hover:bg-blue-100'); 
+                    if (body.classList.contains('dark-mode')) {
+                        contextAddToWishlistBtn.classList.add('dark:text-gray-200', 'dark:hover:bg-gray-600');
+                    }
+                }
 
-        customContextMenu.style.left = `${posX}px`;
-        customContextMenu.style.top = `${posY}px`;
-        customContextMenu.style.visibility = 'visible'; 
+                if (product && FOOD_CATEGORIES.includes(product.category)) {
+                    contextSuggestRecipeBtn.classList.remove('hidden');
+                    contextSuggestRecipeBtn.onclick = () => {
+                        generateRecipe(product.name);
+                        customContextMenu.classList.remove('show');
+                    };
+                } else {
+                    contextSuggestRecipeBtn.classList.add('hidden');
+                    contextSuggestRecipeBtn.onclick = null;
+                }
+                
+            } else {
+                currentRightClickedProductId = null;
+            }
+
+            contextToggleBlackAndWhiteButton.textContent = isBlackAndWhiteMode ? 'Dezactivează Alb/Negru' : 'Activează Alb/Negru';
+
+            customContextMenu.classList.add('show');
+
+            const menuWidth = customContextMenu.offsetWidth;
+            const menuHeight = customContextMenu.offsetHeight;
+            let posX = event.clientX - menuWidth / 2;
+            let posY = event.clientY - menuHeight / 2;
+
+            if (posX + menuWidth > window.innerWidth) {
+                posX = window.innerWidth - menuWidth - 10;
+            }
+            if (posY + menuHeight > window.innerHeight) {
+                posY = window.innerHeight - menuHeight - 10;
+            }
+            if (posX < 0) {
+                posX = 10;
+            }
+            if (posY < 0) {
+                posY = 10;
+            }
+            customContextMenu.style.left = `${posX}px`;
+            customContextMenu.style.top = `${posY}px`;
+        }, 0); 
     });
 
     document.addEventListener('click', (event) => {
         if (customContextMenu.classList.contains('show') && !customContextMenu.contains(event.target)) {
             customContextMenu.classList.remove('show');
-            customContextMenu.style.visibility = 'hidden'; 
         }
     });
 
     contextToggleAnimationsButton.addEventListener('click', () => {
         toggleAnimations(!animationsEnabled);
         customContextMenu.classList.remove('show');
-        customContextMenu.style.visibility = 'hidden';
     });
 
     contextToggleBlackAndWhiteButton.addEventListener('click', () => {
         toggleBlackAndWhiteMode(!isBlackAndWhiteMode);
         customContextMenu.classList.remove('show');
-        customContextMenu.style.visibility = 'hidden';
     });
 
     contextAddToWishlistBtn.addEventListener('click', () => {
@@ -1112,7 +1088,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 addToWishlist(currentRightClickedProductId);
             }
             customContextMenu.classList.remove('show');
-            customContextMenu.style.visibility = 'hidden';
         }
     });
 
@@ -1123,7 +1098,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 showProductModal(product);
             }
             customContextMenu.classList.remove('show');
-            customContextMenu.style.visibility = 'hidden';
         }
     });
 

@@ -10,7 +10,7 @@
     <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/2560px-Flag_2560px-Flag_of_Romania.svg.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=0.6">
+    <link rel="stylesheet" href="style.css?v=0.7">
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Romania.svg/2560px-Flag_of_Romania.svg.png" type="image/png">
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2RVCB30VV4"></script>
@@ -176,12 +176,15 @@
                 <div class="loader hidden"></div>
                 <p id="recipe-text"></p>
             </div>
+            <div class="recipe-footer">
+                <p>Rețetă generată de AI</p>
+            </div>
         </div>
     </div>
 
     <canvas id="sparkCanvas" class="fixed inset-0 pointer-events-none z-40"></canvas>
 
-    <div id="custom-context-menu" class="absolute bg-white rounded-lg shadow-lg py-2 z-50 hidden">
+    <div id="custom-context-menu" class="absolute bg-white rounded-lg shadow-lg py-2 z-50">
         <div id="context-product-name" class="px-4 py-2 text-sm font-semibold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-600 mb-2 hidden"></div>
         <button id="context-add-to-wishlist" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-blue-100 rounded-md hidden">
             Adaugă la Wishlist
@@ -192,6 +195,7 @@
         <button id="context-view-details" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-blue-100 rounded-md hidden">
             Vezi Detalii
         </button>
+        <div id="context-menu-separator" class="border-t border-gray-400 dark:border-gray-500 my-2"></div>
         <button id="context-toggle-animations" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-blue-100 rounded-md">
             Dezactivează Animații
         </button>

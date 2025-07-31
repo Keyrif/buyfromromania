@@ -38,12 +38,10 @@ body {
     }
 }
 
-
 body.no-animations * {
     transition: none !important;
     animation: none !important;
 }
-
 
 
 body.dark-mode {
@@ -71,6 +69,11 @@ body.dark-mode .product-card-container {
 }
 body.dark-mode .product-card-container h3 {
     color: #e2e8f0;
+}
+body.dark-mode #product-modal .bg-white,
+body.dark-mode #wishlist-modal .bg-white,
+body.dark-mode #recipe-modal .bg-white {
+    background-color: rgba(45, 55, 72, 0.9);
 }
 body.dark-mode #product-modal h2,
 body.dark-mode #product-modal p.text-gray-700,
@@ -133,6 +136,15 @@ body.dark-mode #clear-wishlist-btn {
 
 body.dark-mode #clear-mobile-search-btn,
 body.dark-mode #clear-desktop-search-btn {
+    color: #e2e8f0;
+}
+body.dark-mode #clear-mobile-search-btn:hover,
+body.dark-mode #clear-desktop-search-btn:hover {
+    color: #cbd5e0;
+}
+
+body.dark-mode #mobile-search-input,
+body.dark-mode #desktop-search-input {
     color: #a0aec0;
     background-color: transparent;
 }
@@ -166,7 +178,7 @@ body.dark-mode #clear-desktop-search-btn {
 
 @keyframes buttonClickScale {
     0% { transform: scale(1); }
-    50% { transform: scale(1.1); } 
+    50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
 
@@ -275,25 +287,29 @@ body.dark-mode #clear-desktop-search-btn {
 }
 
 #custom-context-menu {
-    display: none;
+    visibility: hidden; 
     position: fixed;
     min-width: 180px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.5); 
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border-radius: 0.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15); 
     z-index: 100;
-    opacity: 0;
-    transition: opacity 0.1s ease-out;
+    opacity: 0; 
+    transform: scale(0.95); 
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s linear 0.2s; 
     pointer-events: none;
 }
 body.dark-mode #custom-context-menu {
-    background-color: rgba(45, 55, 72, 0.5);
+    background-color: rgba(45, 55, 72, 0.5); 
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15); 
 }
 #custom-context-menu.show {
-    display: block;
-    opacity: 1;
+    visibility: visible; 
+    opacity: 1; 
+    transform: scale(1); 
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out; 
     pointer-events: auto;
 }
 #custom-context-menu button {
@@ -438,7 +454,7 @@ body.dark-mode #recipe-modal > div {
 }
 
 body.dark-mode #notification-message {
-    background-color: rgba(45, 55, 72, 0.7); 
+    background-color: rgba(45, 55, 72, 0.7);
     color: #e2e8f0;
 }
 
@@ -452,7 +468,7 @@ body.dark-mode #notification-message {
     bottom: 0;
     left: 0;
     height: 4px;
-    background-color: #2563eb; 
+    background-color: #2563eb;
     width: 100%;
     animation: none;
 }
@@ -460,4 +476,17 @@ body.dark-mode #notification-message {
 @keyframes progressBarFill {
     from { width: 100%; }
     to { width: 0%; }
+}
+
+.recipe-footer {
+    margin-top: 1.5rem; 
+    padding-top: 1rem; 
+    border-top: 1px solid #e5e7eb; 
+    text-align: center; 
+    font-size: 0.875rem; 
+    color: #6b7280; 
+}
+body.dark-mode .recipe-footer {
+    border-top-color: #4a5568; 
+    color: #9ca3af; 
 }
