@@ -331,6 +331,7 @@ body.dark-mode #custom-context-menu button:hover {
 #desktop-search-input {
     background-color: #e5e7eb;
     color: #000000;
+    user-select: none;
 }
 
 body.dark-mode #mobile-search-input,
